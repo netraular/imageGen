@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Combination;
+use App\Jobs\GenerateLlmResponseJob;
 
 class CombinationController extends Controller
 {
@@ -34,7 +35,10 @@ class CombinationController extends Controller
             'is_generated' => 'boolean',
         ]);
 
-        Combination::create($request->all());
+        $combination = Combination::create($request->all());
+
+        // Despacha el job para generar respuestas
+        GenerateLlmResponseJob::dispatch($combination);
 
         return redirect()->route('combinations.index')->with('success', 'Combination created successfully.');
     }
@@ -76,9 +80,9 @@ class CombinationController extends Controller
 
     public function generateResponses(Request $request, Combination $combination)
     {
-        // Lógica para generar respuestas para una combinación usando la API Groq
-        // Esto podría incluir la llamada a la API y la creación de nuevas respuestas en la base de datos
+        // Despacha el job para generar respuestas
+        GenerateLlmResponseJob::dispatch($combination);
 
-        return redirect()->route('combinations.show', $combination)->with('success', 'Responses generated successfully.');
+        return redirect()->route('combinations.show', $combination)->with('success', 'Responses generation job dispatched.');
     }
 }
