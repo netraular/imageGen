@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ConceptController;
 use App\Http\Controllers\CombinationController;
 use App\Http\Controllers\ResponseController;
+use App\Http\Controllers\CategoryController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -16,6 +17,7 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 Route::resource('concepts', ConceptController::class);
 Route::resource('combinations', CombinationController::class);
 Route::resource('responses', ResponseController::class);
+Route::resource('categories', CategoryController::class);
 
 // Rutas específicas para generación de combinaciones y respuestas
 Route::post('combinations/generate', [ConceptController::class, 'generateCombinations'])->name('combinations.generate');
