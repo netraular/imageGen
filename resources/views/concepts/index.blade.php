@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('content')
+@section('content_body')
 <div class="container">
     <h1>Conceptos</h1>
     <a href="{{ route('concepts.create') }}" class="btn btn-primary">Agregar Nuevo Concepto</a>
@@ -20,7 +20,8 @@
                 <td>{{ $concept->name }}</td>
                 <td>{{ $concept->category->name }}</td>
                 <td>
-                    <form action="{{ route('concepts.destroy', $concept->id) }}" method="POST">
+                    <a href="{{ route('concepts.edit', $concept->id) }}" class="btn btn-warning">Editar</a>
+                    <form action="{{ route('concepts.destroy', $concept->id) }}" method="POST" style="display:inline;">
                         @csrf
                         @method('DELETE')
                         <button type="submit" class="btn btn-danger">Eliminar</button>

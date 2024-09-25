@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Concept;
+use App\Models\Category;
 
 class ConceptController extends Controller
 {
@@ -21,7 +22,9 @@ class ConceptController extends Controller
      */
     public function create()
     {
-        //
+        $categories = \App\Models\Category::all();
+        $concepts = Concept::all();
+        return view('concepts.create', compact('categories', 'concepts'));
     }
 
     /**
@@ -30,14 +33,21 @@ class ConceptController extends Controller
     public function store(Request $request)
     {
         $request->validate([
+            'names' => 'required|array',
+            'names.*' => 'required|string|max:255',
             'category_id' => 'required|exists:categories,id',
-            'name' => 'required|string|max:255',
             'parent_id' => 'nullable|exists:concepts,id',
         ]);
 
-        Concept::create($request->all());
+        foreach ($request->input('names') as $name) {
+            Concept::create([
+                'category_id' => $request->input('category_id'),
+                'name' => $name,
+                'parent_id' => $request->input('parent_id'),
+            ]);
+        }
 
-        return redirect()->route('concepts.index')->with('success', 'Concept created successfully.');
+        return redirect()->route('concepts.index')->with('success', 'Conceptos creados exitosamente.');
     }
 
     /**
@@ -45,34 +55,44 @@ class ConceptController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $concept = Concept::findOrFail($id);
+        return view('concepts.show', compact('concept'));
     }
-
     /**
      * Show the form for editing the specified resource.
      */
     public function edit(string $id)
     {
-        //
+        $concept = Concept::findOrFail($id);
+        $categories = \App\Models\Category::all();
+        $concepts = Concept::all();
+        return view('concepts.edit', compact('concept', 'categories', 'concepts'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, Concept $concept)
     {
-        //
+        $request->validate([
+            'category_id' => 'required|exists:categories,id',
+            'name' => 'required|string|max:255',
+            'parent_id' => 'nullable|exists:concepts,id',
+        ]);
+
+        $concept->update($request->all());
+
+        return redirect()->route('concepts.index')->with('success', 'Concepto actualizado exitosamente.');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy($id)
+    public function destroy(Concept $concept)
     {
-        $concept = Concept::findOrFail($id);
         $concept->delete();
 
-        return redirect()->route('concepts.index')->with('success', 'Concept deleted successfully.');
+        return redirect()->route('concepts.index')->with('success', 'Concepto eliminado exitosamente.');
     }
 
     public function generateCombinations(Request $request)
