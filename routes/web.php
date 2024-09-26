@@ -26,3 +26,4 @@ Route::resource('images', ImageController::class);
 // Rutas específicas para generación de combinaciones y respuestas
 Route::post('templates/generate', [TemplateController::class, 'generatePrompts'])->name('templates.generate');
 Route::post('prompts/generate', [PromptController::class, 'generateLlmResponses'])->name('prompts.generate');
+Route::post('templates/executePrompts', [TemplateController::class, 'executePrompts'])->name('templates.executePrompts');

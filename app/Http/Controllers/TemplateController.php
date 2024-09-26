@@ -4,7 +4,10 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Template;
+use App\Models\Element;
 use App\Models\Prompt;
+use Illuminate\Support\Facades\DB;
+use App\Jobs\GenerateLlmResponseJob;
 
 class TemplateController extends Controller
 {
@@ -37,7 +40,6 @@ class TemplateController extends Controller
         $template = Template::create($request->all());
 
         // Llamar a la función para generar prompts
-        $this->generatePrompts($template);
 
         return redirect()->route('templates.index')->with('success', 'Template created successfully.');
     }
@@ -81,18 +83,71 @@ class TemplateController extends Controller
 
         return redirect()->route('templates.index')->with('success', 'Template deleted successfully.');
     }
-    protected function generatePrompts(Template $template)
+    public function generatePrompts(Request $request)
     {
-        // Aquí iría la lógica para generar los prompts basados en la plantilla
-        // Por ejemplo, podrías crear varios prompts con la misma frase de la plantilla
-        // y asignarlos a la plantilla recién creada.
+        $templateId = $request->input('template_id');
+        $template = Template::findOrFail($templateId);
 
-        // Ejemplo básico:
-        Prompt::create([
-            'sentence' => $template->sentence,
-            'template_id' => $template->id,
-        ]);
+        // Obtener la frase de la plantilla
+        $sentence = $template->sentence;
 
-        // Puedes agregar más lógica aquí según tus necesidades
+        // Buscar todas las categorías entre doble claudator
+        preg_match_all('/{{(.*?)}}/', $sentence, $matches);
+        $categories = $matches[1];
+
+        // Obtener todos los elementos de cada categoría
+        $elementsByCategory = [];
+        foreach ($categories as $category) {
+            $elementsByCategory[$category] = Element::whereHas('category', function ($query) use ($category) {
+                $query->where('name', $category);
+            })->pluck('name')->toArray();
+        }
+
+        // Generar todas las combinaciones posibles
+        $combinations = $this->generateCombinations($elementsByCategory);
+
+        // Crear los prompts con las combinaciones generadas
+        DB::transaction(function () use ($template, $sentence, $combinations) {
+            foreach ($combinations as $combination) {
+                $promptSentence = $sentence;
+                foreach ($combination as $category => $element) {
+                    $promptSentence = str_replace("{{{$category}}}", $element, $promptSentence);
+                }
+
+                Prompt::create([
+                    'sentence' => $promptSentence,
+                    'template_id' => $template->id,
+                ]);
+            }
+        });
+
+        return redirect()->route('templates.index')->with('success', 'Prompts generados exitosamente.');
+    }
+    protected function generateCombinations(array $elementsByCategory)
+    {
+        $combinations = [[]];
+
+        foreach ($elementsByCategory as $category => $elements) {
+            $newCombinations = [];
+            foreach ($combinations as $combination) {
+                foreach ($elements as $element) {
+                    $newCombinations[] = array_merge($combination, [$category => $element]);
+                }
+            }
+            $combinations = $newCombinations;
+        }
+
+        return $combinations;
+    }
+    public function executePrompts(Request $request)
+    {
+        $templateId = $request->input('template_id');
+        $prompts = Prompt::where('template_id', $templateId)->get();
+
+        foreach ($prompts as $prompt) {
+            GenerateLlmResponseJob::dispatch($prompt);
+        }
+
+        return redirect()->route('templates.index')->with('success', 'Prompts encolados para ejecución.');
     }
 }

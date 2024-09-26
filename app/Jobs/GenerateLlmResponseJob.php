@@ -2,7 +2,7 @@
 
 namespace App\Jobs;
 
-use App\Models\Combination;
+use App\Models\Prompt;
 use App\Models\LlmResponse;
 use GuzzleHttp\Client;
 use Illuminate\Bus\Queueable;
@@ -15,11 +15,11 @@ class GenerateLlmResponseJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    protected $combination;
+    protected $prompt;
 
-    public function __construct(Combination $combination)
+    public function __construct(Prompt $prompt)
     {
-        $this->combination = $combination;
+        $this->prompt = $prompt;
     }
 
     public function handle()
@@ -32,7 +32,7 @@ class GenerateLlmResponseJob implements ShouldQueue
             'messages' => [
                 [
                     'role' => 'user',
-                    'content' => $this->combination->description,
+                    'content' => $this->prompt->sentence,
                 ],
             ],
             'model' => 'llama3-8b-8192',
@@ -52,14 +52,10 @@ class GenerateLlmResponseJob implements ShouldQueue
 
             // Guarda la respuesta en la base de datos
             LlmResponse::create([
-                'combination_id' => $this->combination->id,
+                'prompt_id' => $this->prompt->id,
                 'response' => $generatedResponse,
                 'source' => 'Groq API',
             ]);
-
-            // Marca la combinación como generada
-            $this->combination->is_generated = true;
-            $this->combination->save();
 
         } catch (\Exception $e) {
             // Manejo de errores

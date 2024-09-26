@@ -24,6 +24,16 @@
                         @method('DELETE')
                         <button type="submit" class="btn btn-danger">Eliminar</button>
                     </form>
+                    <form action="{{ route('templates.generate') }}" method="POST" style="display:inline;">
+                        @csrf
+                        <input type="hidden" name="template_id" value="{{ $template->id }}">
+                        <button type="submit" class="btn btn-success">Generar Prompts</button>
+                    </form>
+                    <form action="{{ route('templates.executePrompts') }}" method="POST" style="display:inline;">
+                        @csrf
+                        <input type="hidden" name="template_id" value="{{ $template->id }}">
+                        <button type="submit" class="btn btn-primary">Ejecutar Prompts</button>
+                    </form>
                 </td>
             </tr>
             @endforeach
