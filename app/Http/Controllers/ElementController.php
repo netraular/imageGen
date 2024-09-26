@@ -3,18 +3,18 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Value;
+use App\Models\Element;
 use App\Models\Category;
 
-class ValueController extends Controller
+class ElementController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $values = Value::all();
-        return view('values.index', compact('values'));
+        $elements = Element::all();
+        return view('elements.index', compact('elements'));
     }
 
     /**
@@ -23,8 +23,8 @@ class ValueController extends Controller
     public function create()
     {
         $categories = Category::all();
-        $values = Value::all();
-        return view('values.create', compact('categories', 'values'));
+        $elements = Element::all();
+        return view('elements.create', compact('categories', 'elements'));
     }
 
     /**
@@ -36,61 +36,61 @@ class ValueController extends Controller
             'names' => 'required|array',
             'names.*' => 'required|string|max:255',
             'category_id' => 'required|exists:categories,id',
-            'parent_id' => 'nullable|exists:values,id',
+            'parent_id' => 'nullable|exists:elements,id',
         ]);
 
         foreach ($request->input('names') as $name) {
-            Value::create([
+            Element::create([
                 'category_id' => $request->input('category_id'),
                 'name' => $name,
                 'parent_id' => $request->input('parent_id'),
             ]);
         }
 
-        return redirect()->route('values.index')->with('success', 'Values created successfully.');
+        return redirect()->route('elements.index')->with('success', 'Elements created successfully.');
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Value $value)
+    public function show(Element $element)
     {
-        return view('values.show', compact('value'));
+        return view('elements.show', compact('element'));
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Value $value)
+    public function edit(Element $element)
     {
         $categories = Category::all();
-        $values = Value::all();
-        return view('values.edit', compact('value', 'categories', 'values'));
+        $elements = Element::all();
+        return view('elements.edit', compact('element', 'categories', 'elements'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Value $value)
+    public function update(Request $request, Element $element)
     {
         $request->validate([
             'category_id' => 'required|exists:categories,id',
             'name' => 'required|string|max:255',
-            'parent_id' => 'nullable|exists:values,id',
+            'parent_id' => 'nullable|exists:elements,id',
         ]);
 
-        $value->update($request->all());
+        $element->update($request->all());
 
-        return redirect()->route('values.index')->with('success', 'Value updated successfully.');
+        return redirect()->route('elements.index')->with('success', 'Element updated successfully.');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Value $value)
+    public function destroy(Element $element)
     {
-        $value->delete();
+        $element->delete();
 
-        return redirect()->route('values.index')->with('success', 'Value deleted successfully.');
+        return redirect()->route('elements.index')->with('success', 'Element deleted successfully.');
     }
 }

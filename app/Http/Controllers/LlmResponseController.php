@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\LlmResponse;
-use App\Models\Generation;
+use App\Models\Prompt;
 
 class LlmResponseController extends Controller
 {
@@ -22,8 +22,8 @@ class LlmResponseController extends Controller
      */
     public function create()
     {
-        $generations = Generation::all();
-        return view('llm_responses.create', compact('generations'));
+        $prompts = Prompt::all();
+        return view('llm_responses.create', compact('prompts'));
     }
 
     /**
@@ -32,7 +32,7 @@ class LlmResponseController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'generation_id' => 'required|exists:generations,id',
+            'prompt_id' => 'required|exists:prompts,id',
             'response' => 'required|string',
             'source' => 'required|string',
         ]);
@@ -55,8 +55,8 @@ class LlmResponseController extends Controller
      */
     public function edit(LlmResponse $llmResponse)
     {
-        $generations = Generation::all();
-        return view('llm_responses.edit', compact('llmResponse', 'generations'));
+        $prompts = Prompt::all();
+        return view('llm_responses.edit', compact('llmResponse', 'prompts'));
     }
 
     /**
@@ -65,7 +65,7 @@ class LlmResponseController extends Controller
     public function update(Request $request, LlmResponse $llmResponse)
     {
         $request->validate([
-            'generation_id' => 'required|exists:generations,id',
+            'prompt_id' => 'required|exists:prompts,id',
             'response' => 'required|string',
             'source' => 'required|string',
         ]);
