@@ -301,36 +301,41 @@ return [
         'topnav_right' => true,
     ],
 
-    // Sidebar items:
-    [
-        'type' => 'sidebar-menu-search',
-        'text' => 'search',
-    ],
-    [
-        'text' => 'Categorías',
-        'url' => 'categories',
-        'icon' => 'fas fa-fw fa-tags',
-    ],
-    [
-        'text' => 'Valores',
-        'url' => 'concepts',
-        'icon' => 'fas fa-solid fa-hippo',
-    ],
-    [
-        'text' => 'Combinaciones',
-        'url' => 'combinations',
-        'icon' => 'fas fa-solid fa-layer-group',
-    ],
-    [
-        'text' => 'Generaciones',
-        'url' => 'generations',
-        'icon' => 'fas fa-solid fa-cloud',
-    ],
-    [
-        'text' => 'Respuestas',
-        'url' => 'responses',
-        'icon' => 'fas fa-solid fa-scroll',//sitemap
-    ],
+            // Sidebar items:
+            [
+                'type' => 'sidebar-menu-search',
+                'text' => 'search',
+            ],
+            [
+                'text' => 'Categorías',
+                'url' => 'categories',
+                'icon' => 'fas fa-fw fa-tags',
+            ],
+            [
+                'text' => 'Valores',
+                'url' => 'values',
+                'icon' => 'fas fa-solid fa-hippo',
+            ],
+            [
+                'text' => 'Combinaciones',
+                'url' => 'combinations',
+                'icon' => 'fas fa-solid fa-layer-group',
+            ],
+            [
+                'text' => 'Generaciones',
+                'url' => 'generations',
+                'icon' => 'fas fa-solid fa-cloud',
+            ],
+            [
+                'text' => 'Respuestas LLM',
+                'url' => 'llm_responses',
+                'icon' => 'fas fa-solid fa-scroll',
+            ],
+            [
+                'text' => 'Imágenes',
+                'url' => 'images',
+                'icon' => 'fas fa-solid fa-image',
+            ],
 ],
 
     /*

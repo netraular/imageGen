@@ -6,7 +6,7 @@
     <button type="button" class="btn btn-outline-success mb-3" id="add-concept-field">
         <i class="bi bi-plus-circle"></i> 
     </button>
-    <form action="{{ route('concepts.store') }}" method="POST">
+    <form action="{{ route('values.store') }}" method="POST">
         @csrf
         <div class="form-group" id="concept-fields">
             <div class="input-group mb-3">
@@ -30,7 +30,7 @@
             <label for="parent_id">Concepto Padre (Opcional)</label>
             <select name="parent_id" id="parent_id" class="form-control">
                 <option value="">Ninguno</option>
-                @foreach($concepts as $concept)
+                @foreach($values as $value)
                 <option value="{{ $concept->id }}">{{ $concept->name }}</option>
                 @endforeach
             </select>
