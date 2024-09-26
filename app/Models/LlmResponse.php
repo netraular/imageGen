@@ -10,6 +10,7 @@ class LlmResponse extends Model
         'prompt_id',
         'response',
         'source',
+        'status',
     ];
 
     public function prompt()

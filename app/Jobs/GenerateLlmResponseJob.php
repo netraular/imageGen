@@ -1,5 +1,5 @@
 <?php
-
+// Al editar este archivo, ejecutar "sudo service supervisor restart"
 namespace App\Jobs;
 
 use App\Models\Prompt;
@@ -39,6 +39,19 @@ class GenerateLlmResponseJob implements ShouldQueue
         ];
 
         try {
+            // Buscar la respuesta LLM asociada al prompt
+            $llmResponse = LlmResponse::where('prompt_id', $this->prompt->id)->first();
+
+            if (!$llmResponse) {
+                // Si no se encuentra ninguna respuesta LLM, lanzar una excepción
+                throw new \Exception('No se encontró ninguna respuesta LLM asociada al prompt.');
+            }
+
+            // Actualizar el estado a "ejecutando"
+            $llmResponse->update([
+                'status' => 'executing',
+            ]);
+
             $response = $client->post($apiUrl, [
                 'headers' => [
                     'Authorization' => 'Bearer ' . $apiKey,
@@ -48,16 +61,23 @@ class GenerateLlmResponseJob implements ShouldQueue
             ]);
 
             $responseData = json_decode($response->getBody(), true);
-            $generatedResponse = $responseData['choices'][0]['message']['content'] ?? '';
+            $generatedResponse = $responseData['choices'][0]['message']['content'] ?? null;
 
-            // Guarda la respuesta en la base de datos
-            LlmResponse::create([
-                'prompt_id' => $this->prompt->id,
+            // Actualizar el estado a "success" y guardar la respuesta
+            $llmResponse->update([
                 'response' => $generatedResponse,
+                'status' => 'success',
                 'source' => 'Groq API',
             ]);
 
         } catch (\Exception $e) {
+            // Actualizar el estado a "error"
+            if ($llmResponse) {
+                $llmResponse->update([
+                    'status' => 'error',
+                ]);
+            }
+
             // Manejo de errores
             // Puedes reintentar el job después de un tiempo si es necesario
             $this->release(60); // Reintenta después de 60 segundos

@@ -8,6 +8,7 @@ use App\Models\Element;
 use App\Models\Prompt;
 use Illuminate\Support\Facades\DB;
 use App\Jobs\GenerateLlmResponseJob;
+use App\Models\LlmResponse;
 
 class TemplateController extends Controller
 {
@@ -145,6 +146,13 @@ class TemplateController extends Controller
         $prompts = Prompt::where('template_id', $templateId)->get();
 
         foreach ($prompts as $prompt) {
+            // Crear un registro en la tabla llm_responses con el estado "pending"
+            $llmResponse = LlmResponse::create([
+                'prompt_id' => $prompt->id,
+                'status' => 'pending',
+            ]);
+
+            // Encolar el job
             GenerateLlmResponseJob::dispatch($prompt);
         }
 
