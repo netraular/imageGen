@@ -307,29 +307,29 @@ return [
         'text' => 'search',
     ],
     [
-        'text' => 'Conceptos',
+        'text' => 'Categorías',
+        'url' => 'categories',
+        'icon' => 'fas fa-fw fa-tags',
+    ],
+    [
+        'text' => 'Valores',
         'url' => 'concepts',
-        'icon' => 'fas fa-fw fa-cogs',
+        'icon' => 'fas fa-solid fa-hippo',
     ],
     [
         'text' => 'Combinaciones',
         'url' => 'combinations',
-        'icon' => 'fas fa-fw fa-cogs',
+        'icon' => 'fas fa-solid fa-layer-group',
+    ],
+    [
+        'text' => 'Generaciones',
+        'url' => 'generations',
+        'icon' => 'fas fa-solid fa-cloud',
     ],
     [
         'text' => 'Respuestas',
         'url' => 'responses',
-        'icon' => 'fas fa-fw fa-cogs',
-    ],
-    [
-        'text' => 'Categorías', // Nuevo elemento para categorías
-        'url' => 'categories',
-        'icon' => 'fas fa-fw fa-tags', // Puedes elegir un icono apropiado
-    ],
-    [
-        'text' => 'blog',
-        'url' => 'admin/blog',
-        'can' => 'manage-blog',
+        'icon' => 'fas fa-solid fa-scroll',//sitemap
     ],
 ],
 

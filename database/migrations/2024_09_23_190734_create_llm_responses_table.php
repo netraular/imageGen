@@ -10,7 +10,9 @@ class CreateLlmResponsesTable extends Migration
     {
         Schema::create('llm_responses', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('combination_id')->constrained();
+            $table->foreignId('combination_id')
+                  ->constrained()
+                  ->onDelete('cascade'); // Añadir esta línea
             $table->text('response');
             $table->string('source'); // e.g., "Groq API"
             $table->timestamps();

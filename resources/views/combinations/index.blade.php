@@ -1,9 +1,9 @@
 @extends('layouts.app')
 
-@section('content')
+@section('content_body')
 <div class="container">
     <h1>Combinaciones</h1>
-    <a href="{{ route('combinations.create') }}" class="btn btn-primary">Generar Nueva Combinación</a>
+    <a href="{{ route('combinations.create') }}" class="btn btn-primary">Crear Nueva Combinación</a>
     <table class="table">
         <thead>
             <tr>
@@ -20,7 +20,8 @@
                 <td>{{ $combination->description }}</td>
                 <td>{{ $combination->is_generated ? 'Sí' : 'No' }}</td>
                 <td>
-                    <a href="{{ route('combinations.show', $combination->id) }}" class="btn btn-info">Ver Respuestas</a>
+                    <a href="{{ route('combinations.show', $combination->id) }}" class="btn btn-info">Ver</a>
+                    <a href="{{ route('combinations.edit', $combination->id) }}" class="btn btn-warning">Editar</a>
                     <form action="{{ route('combinations.destroy', $combination->id) }}" method="POST" style="display:inline;">
                         @csrf
                         @method('DELETE')

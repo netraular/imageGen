@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Combination;
+use App\Models\LlmResponse;
 use App\Jobs\GenerateLlmResponseJob;
 
 class CombinationController extends Controller
@@ -22,7 +23,7 @@ class CombinationController extends Controller
      */
     public function create()
     {
-        //
+        return view('combinations.create');
     }
 
     /**
@@ -46,38 +47,47 @@ class CombinationController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(Combination $combination)
     {
-        //
+        return view('combinations.show', compact('combination'));
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(Combination $combination)
     {
-        //
+        return view('combinations.edit', compact('combination'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, Combination $combination)
     {
-        //
+        $request->validate([
+            'description' => 'required|string',
+            'is_generated' => 'boolean',
+        ]);
+
+        $combination->update($request->all());
+
+        return redirect()->route('combinations.index')->with('success', 'Combination updated successfully.');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy($id)
+    public function destroy(Combination $combination)
     {
-        $combination = Combination::findOrFail($id);
         $combination->delete();
 
         return redirect()->route('combinations.index')->with('success', 'Combination deleted successfully.');
     }
 
+    /**
+     * Generate responses for the specified combination.
+     */
     public function generateResponses(Request $request, Combination $combination)
     {
         // Despacha el job para generar respuestas
