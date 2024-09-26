@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Template;
+use App\Models\Prompt;
 
 class TemplateController extends Controller
 {
@@ -33,7 +34,10 @@ class TemplateController extends Controller
             'sentence' => 'required|string',
         ]);
 
-        Template::create($request->all());
+        $template = Template::create($request->all());
+
+        // Llamar a la función para generar prompts
+        $this->generatePrompts($template);
 
         return redirect()->route('templates.index')->with('success', 'Template created successfully.');
     }
@@ -76,5 +80,19 @@ class TemplateController extends Controller
         $template->delete();
 
         return redirect()->route('templates.index')->with('success', 'Template deleted successfully.');
+    }
+    protected function generatePrompts(Template $template)
+    {
+        // Aquí iría la lógica para generar los prompts basados en la plantilla
+        // Por ejemplo, podrías crear varios prompts con la misma frase de la plantilla
+        // y asignarlos a la plantilla recién creada.
+
+        // Ejemplo básico:
+        Prompt::create([
+            'sentence' => $template->sentence,
+            'template_id' => $template->id,
+        ]);
+
+        // Puedes agregar más lógica aquí según tus necesidades
     }
 }

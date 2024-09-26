@@ -2,17 +2,37 @@
 
 @section('content_body')
 <div class="container">
-    <h1>Agregar Nuevos Conceptos</h1>
-    <button type="button" class="btn btn-outline-success mb-3" id="add-concept-field">
+    <h1>Agregar Nuevos Elementos</h1>
+    <button type="button" class="btn btn-outline-success mb-3" id="add-element-field">
         <i class="bi bi-plus-circle"></i> 
     </button>
-    <form action="{{ route('values.store') }}" method="POST">
+
+    @if ($errors->any())
+        <div class="alert alert-danger">
+            <ul>
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
+
+    <form action="{{ route('elements.store') }}" method="POST">
         @csrf
-        <div class="form-group" id="concept-fields">
+        <div class="form-group" id="element-fields">
+            @if ($errors->has('names.*'))
+                <div class="alert alert-danger">
+                    <ul>
+                        @foreach ($errors->get('names.*') as $error)
+                            <li>{{ $error[0] }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
             <div class="input-group mb-3">
-                <input type="text" name="names[]" class="form-control" placeholder="Nombre del Concepto" required>
+                <input type="text" name="names[]" class="form-control" placeholder="Nombre del Elemento" required>
                 <div class="input-group-append">
-                    <button type="button" class="btn btn-outline-danger remove-concept-field" onclick="removeConceptField(this)">
+                    <button type="button" class="btn btn-outline-danger remove-element-field" onclick="removeElementField(this)">
                         <i class="bi bi-dash-circle"></i>
                     </button>
                 </div>
@@ -25,15 +45,21 @@
                 <option value="{{ $category->id }}">{{ $category->name }}</option>
                 @endforeach
             </select>
+            @error('category_id')
+                <div class="alert alert-danger">{{ $message }}</div>
+            @enderror
         </div>
         <div class="form-group">
-            <label for="parent_id">Concepto Padre (Opcional)</label>
+            <label for="parent_id">Elemento Padre (Opcional)</label>
             <select name="parent_id" id="parent_id" class="form-control">
                 <option value="">Ninguno</option>
-                @foreach($values as $value)
-                <option value="{{ $concept->id }}">{{ $concept->name }}</option>
+                @foreach($elements as $element)
+                <option value="{{ $element->id }}">{{ $element->name }}</option>
                 @endforeach
             </select>
+            @error('parent_id')
+                <div class="alert alert-danger">{{ $message }}</div>
+            @enderror
         </div>
         <button type="submit" class="btn btn-primary">Guardar</button>
     </form>
@@ -42,42 +68,42 @@
 
 @push('js')
 <script>
-    // Definir la función removeConceptField en el ámbito global
-    function removeConceptField(button) {
+    // Definir la función removeElementField en el ámbito global
+    function removeElementField(button) {
         button.closest('.input-group').remove();
         checkAllInputs();
     }
 
     $(document).ready(function() {
-        const addConceptFieldButton = document.getElementById('add-concept-field');
-        const conceptFieldsContainer = document.getElementById('concept-fields');
+        const addElementFieldButton = document.getElementById('add-element-field');
+        const elementFieldsContainer = document.getElementById('element-fields');
 
-        addConceptFieldButton.addEventListener('click', function() {
-            addConceptField();
+        addElementFieldButton.addEventListener('click', function() {
+            addElementField();
         });
 
-        conceptFieldsContainer.addEventListener('input', function(event) {
+        elementFieldsContainer.addEventListener('input', function(event) {
             if (event.target.classList.contains('form-control')) {
                 checkAllInputs();
             }
         });
 
-        function addConceptField() {
+        function addElementField() {
             const newField = document.createElement('div');
             newField.className = 'input-group mb-3';
             newField.innerHTML = `
-                <input type="text" name="names[]" class="form-control" placeholder="Nombre del Concepto" required>
+                <input type="text" name="names[]" class="form-control" placeholder="Nombre del Elemento" required>
                 <div class="input-group-append">
-                    <button type="button" class="btn btn-outline-danger remove-concept-field" onclick="removeConceptField(this)">
+                    <button type="button" class="btn btn-outline-danger remove-element-field" onclick="removeElementField(this)">
                         <i class="bi bi-dash-circle"></i>
                     </button>
                 </div>
             `;
-            conceptFieldsContainer.appendChild(newField);
+            elementFieldsContainer.appendChild(newField);
         }
 
         function checkAllInputs() {
-            const inputs = conceptFieldsContainer.querySelectorAll('.form-control');
+            const inputs = elementFieldsContainer.querySelectorAll('.form-control');
             let allFilled = true;
             inputs.forEach(input => {
                 if (input.value.trim() === '') {
@@ -85,7 +111,7 @@
                 }
             });
             if (allFilled) {
-                addConceptField();
+                addElementField();
             }
         }
     });

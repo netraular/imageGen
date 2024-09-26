@@ -39,11 +39,21 @@ class ElementController extends Controller
             'parent_id' => 'nullable|exists:elements,id',
         ]);
 
+        $parentId = $request->input('parent_id');
+
         foreach ($request->input('names') as $name) {
+            // Verificar si el nombre del elemento es igual al nombre del padre
+            if ($parentId) {
+                $parentElement = Element::find($parentId);
+                if ($parentElement && $parentElement->name === $name) {
+                    return redirect()->back()->withErrors(['names' => 'El nombre del elemento no puede ser igual al nombre del padre.'])->withInput();
+                }
+            }
+
             Element::create([
                 'category_id' => $request->input('category_id'),
                 'name' => $name,
-                'parent_id' => $request->input('parent_id'),
+                'parent_id' => $parentId,
             ]);
         }
 
@@ -78,6 +88,16 @@ class ElementController extends Controller
             'name' => 'required|string|max:255',
             'parent_id' => 'nullable|exists:elements,id',
         ]);
+
+        $parentId = $request->input('parent_id');
+
+        // Verificar si el nombre del elemento es igual al nombre del padre
+        if ($parentId) {
+            $parentElement = Element::find($parentId);
+            if ($parentElement && $parentElement->name === $request->input('name')) {
+                return redirect()->back()->withErrors(['name' => 'El nombre del elemento no puede ser igual al nombre del padre.'])->withInput();
+            }
+        }
 
         $element->update($request->all());
 
