@@ -2,8 +2,8 @@
 
 @section('content')
 <div class="container">
-    <h1>Valores</h1>
-    <a href="{{ route('values.create') }}" class="btn btn-primary">Agregar Nuevo Valor</a>
+    <h1>Elementos</h1>
+    <a href="{{ route('elements.create') }}" class="btn btn-primary">Agregar Nuevo Elemento</a>
     <table class="table">
         <thead>
             <tr>
@@ -14,14 +14,14 @@
             </tr>
         </thead>
         <tbody>
-            @foreach($values as $value)
+            @foreach($elements as $element)
             <tr>
-                <td>{{ $value->id }}</td>
-                <td>{{ $value->name }}</td>
-                <td>{{ $value->category->name }}</td>
+                <td>{{ $element->id }}</td>
+                <td>{{ $element->name }}</td>
+                <td>{{ $element->category->name }}</td>
                 <td>
-                    <a href="{{ route('values.edit', $value->id) }}" class="btn btn-warning">Editar</a>
-                    <form action="{{ route('values.destroy', $value->id) }}" method="POST" style="display:inline;">
+                    <a href="{{ route('elements.edit', $element->id) }}" class="btn btn-warning">Editar</a>
+                    <form action="{{ route('elements.destroy', $element->id) }}" method="POST" style="display:inline;">
                         @csrf
                         @method('DELETE')
                         <button type="submit" class="btn btn-danger">Eliminar</button>

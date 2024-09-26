@@ -2,9 +2,9 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CategoryController;
-use App\Http\Controllers\ValueController;
-use App\Http\Controllers\CombinationController;
-use App\Http\Controllers\GenerationController;
+use App\Http\Controllers\ElementController;
+use App\Http\Controllers\TemplateController;
+use App\Http\Controllers\PromptController;
 use App\Http\Controllers\LlmResponseController;
 use App\Http\Controllers\ImageController;
 
@@ -17,12 +17,12 @@ Auth::routes();
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
 Route::resource('categories', CategoryController::class);
-Route::resource('values', ValueController::class);
-Route::resource('combinations', CombinationController::class);
-Route::resource('generations', GenerationController::class);
+Route::resource('elements', ElementController::class);
+Route::resource('templates', TemplateController::class);
+Route::resource('prompts', PromptController::class);
 Route::resource('llm_responses', LlmResponseController::class);
 Route::resource('images', ImageController::class);
 
 // Rutas específicas para generación de combinaciones y respuestas
-Route::post('combinations/generate', [CombinationController::class, 'generateResponses'])->name('combinations.generate');
-Route::post('generations/generate', [GenerationController::class, 'generateResponses'])->name('generations.generate');
+Route::post('templates/generate', [TemplateController::class, 'generatePrompts'])->name('templates.generate');
+Route::post('prompts/generate', [PromptController::class, 'generateLlmResponses'])->name('prompts.generate');

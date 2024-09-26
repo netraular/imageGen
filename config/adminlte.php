@@ -312,18 +312,18 @@ return [
                 'icon' => 'fas fa-fw fa-tags',
             ],
             [
-                'text' => 'Valores',
-                'url' => 'values',
+                'text' => 'Elementos',
+                'url' => 'elements',
                 'icon' => 'fas fa-solid fa-hippo',
             ],
             [
-                'text' => 'Combinaciones',
-                'url' => 'combinations',
+                'text' => 'Plantillas',
+                'url' => 'templates',
                 'icon' => 'fas fa-solid fa-layer-group',
             ],
             [
-                'text' => 'Generaciones',
-                'url' => 'generations',
+                'text' => 'Prompts',
+                'url' => 'prompts',
                 'icon' => 'fas fa-solid fa-cloud',
             ],
             [

@@ -10,7 +10,7 @@
                 <th>ID</th>
                 <th>Respuesta</th>
                 <th>Fuente</th>
-                <th>Generación</th>
+                <th>Prompt</th>
                 <th>Acciones</th>
             </tr>
         </thead>
@@ -20,7 +20,7 @@
                 <td>{{ $llmResponse->id }}</td>
                 <td>{{ $llmResponse->response }}</td>
                 <td>{{ $llmResponse->source }}</td>
-                <td>{{ $llmResponse->generation->sentence }}</td>
+                <td>{{ $llmResponse->prompt->sentence }}</td>
                 <td>
                     <a href="{{ route('llm_responses.edit', $llmResponse->id) }}" class="btn btn-warning">Editar</a>
                     <form action="{{ route('llm_responses.destroy', $llmResponse->id) }}" method="POST" style="display:inline;">
