@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Combination;
-use App\Models\LlmResponse;
+use App\Models\Generation;
 use App\Jobs\GenerateLlmResponseJob;
 
 class CombinationController extends Controller
@@ -32,8 +32,7 @@ class CombinationController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'description' => 'required|string',
-            'is_generated' => 'boolean',
+            'sentence' => 'required|string',
         ]);
 
         $combination = Combination::create($request->all());
@@ -66,8 +65,7 @@ class CombinationController extends Controller
     public function update(Request $request, Combination $combination)
     {
         $request->validate([
-            'description' => 'required|string',
-            'is_generated' => 'boolean',
+            'sentence' => 'required|string',
         ]);
 
         $combination->update($request->all());

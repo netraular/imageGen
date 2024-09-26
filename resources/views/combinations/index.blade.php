@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('content_body')
+@section('content')
 <div class="container">
     <h1>Combinaciones</h1>
     <a href="{{ route('combinations.create') }}" class="btn btn-primary">Crear Nueva Combinación</a>
@@ -8,8 +8,7 @@
         <thead>
             <tr>
                 <th>ID</th>
-                <th>Descripción</th>
-                <th>Generada</th>
+                <th>Frase</th>
                 <th>Acciones</th>
             </tr>
         </thead>
@@ -17,10 +16,8 @@
             @foreach($combinations as $combination)
             <tr>
                 <td>{{ $combination->id }}</td>
-                <td>{{ $combination->description }}</td>
-                <td>{{ $combination->is_generated ? 'Sí' : 'No' }}</td>
+                <td>{{ $combination->sentence }}</td>
                 <td>
-                    <a href="{{ route('combinations.show', $combination->id) }}" class="btn btn-info">Ver</a>
                     <a href="{{ route('combinations.edit', $combination->id) }}" class="btn btn-warning">Editar</a>
                     <form action="{{ route('combinations.destroy', $combination->id) }}" method="POST" style="display:inline;">
                         @csrf

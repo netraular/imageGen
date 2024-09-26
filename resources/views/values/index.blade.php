@@ -1,9 +1,9 @@
 @extends('layouts.app')
 
-@section('content_body')
+@section('content')
 <div class="container">
-    <h1>Conceptos</h1>
-    <a href="{{ route('concepts.create') }}" class="btn btn-primary">Agregar Nuevo Concepto</a>
+    <h1>Valores</h1>
+    <a href="{{ route('values.create') }}" class="btn btn-primary">Agregar Nuevo Valor</a>
     <table class="table">
         <thead>
             <tr>
@@ -14,14 +14,14 @@
             </tr>
         </thead>
         <tbody>
-            @foreach($concepts as $concept)
+            @foreach($values as $value)
             <tr>
-                <td>{{ $concept->id }}</td>
-                <td>{{ $concept->name }}</td>
-                <td>{{ $concept->category->name }}</td>
+                <td>{{ $value->id }}</td>
+                <td>{{ $value->name }}</td>
+                <td>{{ $value->category->name }}</td>
                 <td>
-                    <a href="{{ route('concepts.edit', $concept->id) }}" class="btn btn-warning">Editar</a>
-                    <form action="{{ route('concepts.destroy', $concept->id) }}" method="POST" style="display:inline;">
+                    <a href="{{ route('values.edit', $value->id) }}" class="btn btn-warning">Editar</a>
+                    <form action="{{ route('values.destroy', $value->id) }}" method="POST" style="display:inline;">
                         @csrf
                         @method('DELETE')
                         <button type="submit" class="btn btn-danger">Eliminar</button>
