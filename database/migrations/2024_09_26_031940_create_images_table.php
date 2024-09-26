@@ -13,7 +13,7 @@ class CreateImagesTable extends Migration
     {
         Schema::create('images', function (Blueprint $table) {
             $table->id(); // Identificador único de la imagen
-            $table->foreignId('llm_response_id')->constrained('llm_responses'); // Relaciona la imagen generada con el prompt
+            $table->foreignId('llm_response_id')->constrained('llm_responses'); // Relaciona la imagen generada con la respuesta
             $table->string('image_path'); // Indica el path del archivo imagen que se ha generado
             $table->timestamps();
         });

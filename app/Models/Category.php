@@ -10,8 +10,8 @@ class Category extends Model
         'name',
     ];
 
-    public function values()
+    public function elements()
     {
-        return $this->hasMany(Value::class);
+        return $this->hasMany(Element::class);
     }
 }

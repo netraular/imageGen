@@ -13,7 +13,7 @@ class CreateLlmResponsesTable extends Migration
     {
         Schema::create('llm_responses', function (Blueprint $table) {
             $table->id(); // Identificador único de la respuesta
-            $table->foreignId('generation_id')->constrained('generations'); // Relaciona la respuesta con una generación
+            $table->foreignId('prompt_id')->constrained('prompts'); // Relaciona la respuesta con un prompt
             $table->text('response'); // El texto generado por IA
             $table->string('source'); // Modelo de IA que se ha usado para generar la respuesta
             $table->timestamps();

@@ -4,16 +4,16 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Generation extends Model
+class Prompt extends Model
 {
     protected $fillable = [
         'sentence',
-        'combination_id',
+        'template_id',
     ];
 
-    public function combination()
+    public function template()
     {
-        return $this->belongsTo(Combination::class);
+        return $this->belongsTo(Template::class);
     }
 
     public function llmResponses()

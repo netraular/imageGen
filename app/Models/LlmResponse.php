@@ -7,14 +7,14 @@ use Illuminate\Database\Eloquent\Model;
 class LlmResponse extends Model
 {
     protected $fillable = [
-        'generation_id',
+        'prompt_id',
         'response',
         'source',
     ];
 
-    public function generation()
+    public function prompt()
     {
-        return $this->belongsTo(Generation::class);
+        return $this->belongsTo(Prompt::class);
     }
 
     public function images()
