@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Concept extends Model
+class Value extends Model
 {
     protected $fillable = [
         'category_id',
@@ -19,11 +19,11 @@ class Concept extends Model
 
     public function parent()
     {
-        return $this->belongsTo(Concept::class, 'parent_id');
+        return $this->belongsTo(Value::class, 'parent_id');
     }
 
     public function children()
     {
-        return $this->hasMany(Concept::class, 'parent_id');
+        return $this->hasMany(Value::class, 'parent_id');
     }
 }

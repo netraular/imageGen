@@ -6,16 +6,19 @@ use Illuminate\Database\Eloquent\Model;
 
 class LlmResponse extends Model
 {
-    protected $table = 'llm_responses';
-
     protected $fillable = [
-        'combination_id',
+        'generation_id',
         'response',
         'source',
     ];
 
-    public function combination()
+    public function generation()
     {
-        return $this->belongsTo(Combination::class);
+        return $this->belongsTo(Generation::class);
+    }
+
+    public function images()
+    {
+        return $this->hasMany(Image::class);
     }
 }

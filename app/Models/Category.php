@@ -10,8 +10,8 @@ class Category extends Model
         'name',
     ];
 
-    public function concepts()
+    public function values()
     {
-        return $this->hasMany(Concept::class);
+        return $this->hasMany(Value::class);
     }
 }

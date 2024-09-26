@@ -7,12 +7,11 @@ use Illuminate\Database\Eloquent\Model;
 class Combination extends Model
 {
     protected $fillable = [
-        'description',
-        'is_generated',
+        'sentence',
     ];
 
-    public function llmResponses()
+    public function generations()
     {
-        return $this->hasMany(LlmResponse::class);
+        return $this->hasMany(Generation::class);
     }
 }
