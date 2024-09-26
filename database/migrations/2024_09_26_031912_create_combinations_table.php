@@ -6,16 +6,21 @@ use Illuminate\Support\Facades\Schema;
 
 class CreateCombinationsTable extends Migration
 {
+    /**
+     * Run the migrations.
+     */
     public function up()
     {
         Schema::create('combinations', function (Blueprint $table) {
-            $table->id();
-            $table->text('description');
-            $table->boolean('is_generated')->default(false);
+            $table->id(); // Identificador único de la combinación
+            $table->text('sentence'); // Frase genérica que se usará para generar textos
             $table->timestamps();
         });
     }
 
+    /**
+     * Reverse the migrations.
+     */
     public function down()
     {
         Schema::dropIfExists('combinations');
