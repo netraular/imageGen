@@ -257,7 +257,7 @@ return [
     */
 
     'use_route_url' => false,
-    'dashboard_url' => 'home',
+    'dashboard_url' => '/',
     'logout_url' => 'logout',
     'login_url' => 'login',
     'register_url' => 'register',
@@ -299,6 +299,12 @@ return [
         'type' => 'navbar-search',
         'text' => 'search',
         'topnav_right' => true,
+    ],
+    [
+        'text' => 'login',
+        'url'=> 'login',
+        'topnav_right' => true,
+        'can'=> 'logged-in',
     ],
 
             // Sidebar items:

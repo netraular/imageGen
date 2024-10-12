@@ -1,0 +1,215 @@
+{
+  "503": {
+    "inputs": {
+      "filename_prefix": "ComfyUI",
+      "images": [
+        "512:4",
+        0
+      ]
+    },
+    "class_type": "SaveImage",
+    "_meta": {
+      "title": "Save Image"
+    }
+  },
+  "508": {
+    "inputs": {
+      "PowerLoraLoaderHeaderWidget": {
+        "type": "PowerLoraLoaderHeaderWidget"
+      },
+      "lora_1": {
+        "on": true,
+        "lora": "None",
+        "strength": 1
+      },
+      "➕ Add Lora": "",
+      "model": [
+        "514",
+        0
+      ],
+      "clip": [
+        "515",
+        0
+      ]
+    },
+    "class_type": "Power Lora Loader (rgthree)",
+    "_meta": {
+      "title": "Lora Loader"
+    }
+  },
+  "514": {
+    "inputs": {
+      "unet_name": "flux1-dev-Q8_0.gguf"
+    },
+    "class_type": "UnetLoaderGGUF",
+    "_meta": {
+      "title": "Unet Loader (GGUF)"
+    }
+  },
+  "515": {
+    "inputs": {
+      "clip_name1": "ViT-L-14-TEXT-detail-improved-hiT-GmP-TE-only-HF.safetensors",
+      "clip_name2": "t5-v1_1-xxl-encoder-Q8_0.gguf",
+      "type": "flux"
+    },
+    "class_type": "DualCLIPLoaderGGUF",
+    "_meta": {
+      "title": "DualCLIPLoader (GGUF)"
+    }
+  },
+  "511:0": {
+    "inputs": {
+      "noise_seed": 477279735997901
+    },
+    "class_type": "RandomNoise",
+    "_meta": {
+      "title": "RandomNoise"
+    }
+  },
+  "511:1": {
+    "inputs": {
+      "width": 1024,
+      "height": 1024,
+      "batch_size": 2
+    },
+    "class_type": "EmptySD3LatentImage",
+    "_meta": {
+      "title": "EmptySD3LatentImage"
+    }
+  },
+  "509:0": {
+    "inputs": {
+      "text": "A whimsical dragon sticker featuring a playful, pastel-colored dragon with large, expressive eyes and a mischievous grin. The dragon is adorned with shimmering scales that change color like a rainbow, and it wears a tiny, jewel-encrusted crown on its head. It sits on a fluffy, cotton-candy cloud, surrounded by twinkling stars and tiny, glowing fireflies. The background is a soft, gradient sky with hues of pink, lavender, and soft blue, creating a dreamy and enchanting atmosphere. The sticker should have a glossy finish, giving it a vibrant and magical appearance.",
+      "clip": [
+        "508",
+        1
+      ]
+    },
+    "class_type": "CLIPTextEncode",
+    "_meta": {
+      "title": "CLIP Text Encode (Prompt)"
+    }
+  },
+  "509:1": {
+    "inputs": {
+      "guidance": 4,
+      "conditioning": [
+        "509:0",
+        0
+      ]
+    },
+    "class_type": "FluxGuidance",
+    "_meta": {
+      "title": "FluxGuidance"
+    }
+  },
+  "510:0": {
+    "inputs": {
+      "sampler_name": "euler"
+    },
+    "class_type": "KSamplerSelect",
+    "_meta": {
+      "title": "KSamplerSelect"
+    }
+  },
+  "510:1": {
+    "inputs": {
+      "scheduler": "simple",
+      "steps": 20,
+      "denoise": 1,
+      "model": [
+        "512:1",
+        0
+      ]
+    },
+    "class_type": "BasicScheduler",
+    "_meta": {
+      "title": "BasicScheduler"
+    }
+  },
+  "512:0": {
+    "inputs": {
+      "vae_name": "ae.safetensors"
+    },
+    "class_type": "VAELoader",
+    "_meta": {
+      "title": "Load VAE"
+    }
+  },
+  "512:1": {
+    "inputs": {
+      "max_shift": 1.15,
+      "base_shift": 0.5,
+      "width": 1024,
+      "height": 1024,
+      "model": [
+        "508",
+        0
+      ]
+    },
+    "class_type": "ModelSamplingFlux",
+    "_meta": {
+      "title": "ModelSamplingFlux"
+    }
+  },
+  "512:2": {
+    "inputs": {
+      "model": [
+        "512:1",
+        0
+      ],
+      "conditioning": [
+        "509:1",
+        0
+      ]
+    },
+    "class_type": "BasicGuider",
+    "_meta": {
+      "title": "BasicGuider"
+    }
+  },
+  "512:3": {
+    "inputs": {
+      "noise": [
+        "511:0",
+        0
+      ],
+      "guider": [
+        "512:2",
+        0
+      ],
+      "sampler": [
+        "510:0",
+        0
+      ],
+      "sigmas": [
+        "510:1",
+        0
+      ],
+      "latent_image": [
+        "511:1",
+        0
+      ]
+    },
+    "class_type": "SamplerCustomAdvanced",
+    "_meta": {
+      "title": "SamplerCustomAdvanced"
+    }
+  },
+  "512:4": {
+    "inputs": {
+      "samples": [
+        "512:3",
+        0
+      ],
+      "vae": [
+        "512:0",
+        0
+      ]
+    },
+    "class_type": "VAEDecode",
+    "_meta": {
+      "title": "VAE Decode"
+    }
+  }
+}
