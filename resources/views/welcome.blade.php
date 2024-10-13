@@ -60,7 +60,7 @@
                 <li><strong>1.0.17:</strong> Basic filtering options for categories, elements, favorite texts, and images.</li>
             </ul>
         </li>
-        <li><strong>Job Scheduling and Notification:</strong>
+        <li><strong>Job Scheduling and Notification:<a href="https://github.com/jeroennoten/Laravel-AdminLTE/wiki/Special-Menu-Items#navbar-notification"> [*]</a></strong>
             <ul>
                 <li><strong>1.0.18:</strong> Use Laravel jobs for handling multiple LLM responses or images.</li>
                 <li><strong>1.0.19:</strong> Basic notification system for job completion.</li>

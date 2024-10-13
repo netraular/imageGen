@@ -134,11 +134,11 @@ return [
     */
 
     'usermenu_enabled' => true,
-    'usermenu_header' => false,
-    'usermenu_header_class' => 'bg-primary',
-    'usermenu_image' => false,
-    'usermenu_desc' => false,
-    'usermenu_profile_url' => false,
+    'usermenu_header' => true,
+    'usermenu_header_class' => 'bg-info',
+    'usermenu_image' => true,
+    'usermenu_desc' => true,
+    'usermenu_profile_url' => true,
 
     /*
     |--------------------------------------------------------------------------
@@ -304,7 +304,7 @@ return [
         'text' => 'login',
         'url'=> 'login',
         'topnav_right' => true,
-        'can'=> 'logged-in',
+        'can'=> 'not-logged-in',
     ],
 
     // Sidebar items:
@@ -316,31 +316,37 @@ return [
         'text' => 'Categories',
         'url' => 'categories',
         'icon' => 'fas fa-fw fa-tags',
+        'can'=>'logged-in',
     ],
     [
         'text' => 'Elements',
         'url' => 'elements',
         'icon' => 'fas fa-solid fa-box',
+        'can'=>'logged-in',
     ],
     [
         'text' => 'Templates',
         'url' => 'templates',
         'icon' => 'fas fa-solid fa-sitemap',
+        'can'=>'logged-in',
     ],
     [
         'text' => 'Prompts',
         'url' => 'prompts',
         'icon' => 'fas fa-solid fa-layer-group',
+        'can'=>'logged-in',
     ],
     [
         'text' => 'LLM Responses',
         'url' => 'llm_responses',
         'icon' => 'fas fa-solid fa-cloud',
+        'can'=>'logged-in',
     ],
     [
         'text' => 'Images',
         'url' => 'images',
         'icon' => 'fas fa-solid fa-image',
+        'can'=>'logged-in',
     ],
 ],
 

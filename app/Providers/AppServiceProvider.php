@@ -24,6 +24,10 @@ class AppServiceProvider extends ServiceProvider
     {
         // Define the gate to check if a user is logged in
         Gate::define('logged-in', function ($user = null) {
+            return $user !== null;
+        });
+        // Define the gate to check if a user is logged in
+        Gate::define('not-logged-in', function ($user = null) {
             return $user == null;
         });
 
