@@ -313,103 +313,32 @@ return [
         'text' => 'search',
     ],
     [
-        'text' => 'Categorías',
+        'text' => 'Categories',
         'url' => 'categories',
         'icon' => 'fas fa-fw fa-tags',
     ],
     [
-        'text' => 'Elementos',
+        'text' => 'Elements',
         'url' => 'elements',
-        'icon' => 'fas fa-solid fa-hippo',
+        'icon' => 'fas fa-solid fa-box',
     ],
     [
-        'text' => 'Plantillas',
+        'text' => 'Templates',
         'url' => 'templates',
-        'icon' => 'fas fa-solid fa-layer-group',
+        'icon' => 'fas fa-solid fa-sitemap',
     ],
     [
         'text' => 'Prompts',
         'url' => 'prompts',
+        'icon' => 'fas fa-solid fa-layer-group',
+    ],
+    [
+        'text' => 'LLM Responses',
+        'url' => 'llm_responses',
         'icon' => 'fas fa-solid fa-cloud',
     ],
     [
-        'text' => 'Respuestas LLM',
-        'url' => 'llm_responses',
-        'icon' => 'fas fa-solid fa-scroll',
-    ],
-    [
-        'text' => 'Imágenes',
-        'url' => 'images',
-        'icon' => 'fas fa-solid fa-image',
-    ],
-    [
-        'text' => 'Imágenes',
-        'url' => 'images',
-        'icon' => 'fas fa-solid fa-image',
-    ],
-    [
-        'text' => 'Imágenes',
-        'url' => 'images',
-        'icon' => 'fas fa-solid fa-image',
-    ],
-    [
-        'text' => 'Imágenes',
-        'url' => 'images',
-        'icon' => 'fas fa-solid fa-image',
-    ],
-    [
-        'text' => 'Imágenes',
-        'url' => 'images',
-        'icon' => 'fas fa-solid fa-image',
-    ],
-    [
-        'text' => 'Imágenes',
-        'url' => 'images',
-        'icon' => 'fas fa-solid fa-image',
-    ],
-    [
-        'text' => 'Imágenes',
-        'url' => 'images',
-        'icon' => 'fas fa-solid fa-image',
-    ],
-    [
-        'text' => 'Imágenes',
-        'url' => 'images',
-        'icon' => 'fas fa-solid fa-image',
-    ],
-    [
-        'text' => 'Imágenes',
-        'url' => 'images',
-        'icon' => 'fas fa-solid fa-image',
-    ],
-    [
-        'text' => 'Imágenes',
-        'url' => 'images',
-        'icon' => 'fas fa-solid fa-image',
-    ],
-    [
-        'text' => 'Imágenes',
-        'url' => 'images',
-        'icon' => 'fas fa-solid fa-image',
-    ],
-    
-    [
-        'text' => 'Imágenes',
-        'url' => 'images',
-        'icon' => 'fas fa-solid fa-image',
-    ],
-    [
-        'text' => 'Imágenes',
-        'url' => 'images',
-        'icon' => 'fas fa-solid fa-image',
-    ],
-    [
-        'text' => 'Imágenes',
-        'url' => 'images',
-        'icon' => 'fas fa-solid fa-image',
-    ],
-    [
-        'text' => 'ImágenesF',
+        'text' => 'Images',
         'url' => 'images',
         'icon' => 'fas fa-solid fa-image',
     ],
