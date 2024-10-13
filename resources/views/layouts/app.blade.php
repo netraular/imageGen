@@ -24,52 +24,29 @@
     @endif
 @stop
 
-{{-- Rename section content to content_body --}}
-
 @section('content')
     @yield('content_body')
 @stop
 
-{{-- Create a common footer --}}
-
-@section('footer')
-    <div class="float-right">
-        Version: {{ config('app.version', '1.0.0') }}
-    </div>
-
-    <strong>
-        <a href="{{ config('app.company_url', '#') }}">
-            {{ config('app.company_name', 'My company') }}
-        </a>
-    </strong>
-@stop
-
-{{-- Add common Javascript/Jquery code --}}
-
 @push('js')
-<script>
 
-    $(document).ready(function() {
-        // Add your common script logic here...
-    });
-
-</script>
 @endpush
 
-{{-- Add common CSS customizations --}}
-
 @push('css')
-<style type="text/css">
+<style>
+.main-sidebar {
+    height: 100vh; /* Ocupa todo el alto de la ventana */
+    display: flex;
+    flex-direction: column;
+}
 
-    {{-- You can add AdminLTE customizations here --}}
-    /*
-    .card-header {
-        border-bottom: none;
-    }
-    .card-title {
-        font-weight: 600;
-    }
-    */
+.sidebar {
+    flex: 1; /* Hace que el sidebar ocupe el espacio restante */
+}
 
+.sidebar-footer {
+    padding: 10px;
+    border-top: 1px solid #dee2e6;
+}
 </style>
 @endpush

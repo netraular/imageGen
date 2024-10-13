@@ -154,7 +154,7 @@ return [
 
     'layout_topnav' => null,
     'layout_boxed' => null,
-    'layout_fixed_sidebar' => null,
+    'layout_fixed_sidebar' => '1',
     'layout_fixed_navbar' => null,
     'layout_fixed_footer' => null,
     'layout_dark_mode' => null,
@@ -196,7 +196,7 @@ return [
     'classes_content_wrapper' => '',
     'classes_content_header' => '',
     'classes_content' => '',
-    'classes_sidebar' => 'sidebar-dark-primary elevation-4',
+    'classes_sidebar' => 'sidebar-dark-primary elevation-4 sidebar-with-footer',
     'classes_sidebar_nav' => '',
     'classes_topnav' => 'navbar-white navbar-light',
     'classes_topnav_nav' => 'navbar-expand',
@@ -307,41 +307,112 @@ return [
         'can'=> 'logged-in',
     ],
 
-            // Sidebar items:
-            [
-                'type' => 'sidebar-menu-search',
-                'text' => 'search',
-            ],
-            [
-                'text' => 'Categorías',
-                'url' => 'categories',
-                'icon' => 'fas fa-fw fa-tags',
-            ],
-            [
-                'text' => 'Elementos',
-                'url' => 'elements',
-                'icon' => 'fas fa-solid fa-hippo',
-            ],
-            [
-                'text' => 'Plantillas',
-                'url' => 'templates',
-                'icon' => 'fas fa-solid fa-layer-group',
-            ],
-            [
-                'text' => 'Prompts',
-                'url' => 'prompts',
-                'icon' => 'fas fa-solid fa-cloud',
-            ],
-            [
-                'text' => 'Respuestas LLM',
-                'url' => 'llm_responses',
-                'icon' => 'fas fa-solid fa-scroll',
-            ],
-            [
-                'text' => 'Imágenes',
-                'url' => 'images',
-                'icon' => 'fas fa-solid fa-image',
-            ],
+    // Sidebar items:
+    [
+        'type' => 'sidebar-menu-search',
+        'text' => 'search',
+    ],
+    [
+        'text' => 'Categorías',
+        'url' => 'categories',
+        'icon' => 'fas fa-fw fa-tags',
+    ],
+    [
+        'text' => 'Elementos',
+        'url' => 'elements',
+        'icon' => 'fas fa-solid fa-hippo',
+    ],
+    [
+        'text' => 'Plantillas',
+        'url' => 'templates',
+        'icon' => 'fas fa-solid fa-layer-group',
+    ],
+    [
+        'text' => 'Prompts',
+        'url' => 'prompts',
+        'icon' => 'fas fa-solid fa-cloud',
+    ],
+    [
+        'text' => 'Respuestas LLM',
+        'url' => 'llm_responses',
+        'icon' => 'fas fa-solid fa-scroll',
+    ],
+    [
+        'text' => 'Imágenes',
+        'url' => 'images',
+        'icon' => 'fas fa-solid fa-image',
+    ],
+    [
+        'text' => 'Imágenes',
+        'url' => 'images',
+        'icon' => 'fas fa-solid fa-image',
+    ],
+    [
+        'text' => 'Imágenes',
+        'url' => 'images',
+        'icon' => 'fas fa-solid fa-image',
+    ],
+    [
+        'text' => 'Imágenes',
+        'url' => 'images',
+        'icon' => 'fas fa-solid fa-image',
+    ],
+    [
+        'text' => 'Imágenes',
+        'url' => 'images',
+        'icon' => 'fas fa-solid fa-image',
+    ],
+    [
+        'text' => 'Imágenes',
+        'url' => 'images',
+        'icon' => 'fas fa-solid fa-image',
+    ],
+    [
+        'text' => 'Imágenes',
+        'url' => 'images',
+        'icon' => 'fas fa-solid fa-image',
+    ],
+    [
+        'text' => 'Imágenes',
+        'url' => 'images',
+        'icon' => 'fas fa-solid fa-image',
+    ],
+    [
+        'text' => 'Imágenes',
+        'url' => 'images',
+        'icon' => 'fas fa-solid fa-image',
+    ],
+    [
+        'text' => 'Imágenes',
+        'url' => 'images',
+        'icon' => 'fas fa-solid fa-image',
+    ],
+    [
+        'text' => 'Imágenes',
+        'url' => 'images',
+        'icon' => 'fas fa-solid fa-image',
+    ],
+    
+    [
+        'text' => 'Imágenes',
+        'url' => 'images',
+        'icon' => 'fas fa-solid fa-image',
+    ],
+    [
+        'text' => 'Imágenes',
+        'url' => 'images',
+        'icon' => 'fas fa-solid fa-image',
+    ],
+    [
+        'text' => 'Imágenes',
+        'url' => 'images',
+        'icon' => 'fas fa-solid fa-image',
+    ],
+    [
+        'text' => 'ImágenesF',
+        'url' => 'images',
+        'icon' => 'fas fa-solid fa-image',
+    ],
 ],
 
     /*
