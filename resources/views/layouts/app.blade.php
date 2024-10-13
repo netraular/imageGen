@@ -1,3 +1,5 @@
+<link rel="icon" href="{{ url('favicon.png') }}">
+
 @extends('adminlte::page')
 
 {{-- Extend and customize the browser title --}}
