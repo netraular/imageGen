@@ -44,7 +44,7 @@
 
                         <div class="form-group">
                             <label for="comfyui_url">ComfyUI URL</label>
-                            <input type="url" name="comfyui_url" id="comfyui_url" class="form-control" value="{{ $user->comfyui_url }}">
+                            <input type="url" name="comfyui_url" id="comfyui_url" class="form-control" placeholder="Enter new ComfyUI URL to update">
                         </div>
 
                         <button type="submit" class="btn btn-primary">Update Profile</button>

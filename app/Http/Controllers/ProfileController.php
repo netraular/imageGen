@@ -33,7 +33,18 @@ class ProfileController extends Controller
             'comfyui_url' => 'nullable|url',
         ]);
 
-        $user->update($request->except('email'));
+        $data = $request->except('email', 'llm_api_key', 'comfyui_url');
+
+        if ($request->filled('llm_api_key')) {
+            $data['llm_api_key'] = $request->llm_api_key;
+        }
+
+        if ($request->filled('comfyui_url')) {
+            $data['comfyui_url'] = $request->comfyui_url;
+        }
+
+        $user->update($data);
+
         return redirect()->route('profile.show')->with('success', 'Profile updated successfully.');
     }
 }

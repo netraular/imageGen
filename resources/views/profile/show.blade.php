@@ -19,7 +19,7 @@
                     <p><strong>Description:</strong> {{ $user->description ?? 'No description' }}</p>
                     <p><strong>LLM API Key:</strong> {{ $user->masked_llm_api_key }}</p>
                     <p><strong>LLM Service Name:</strong> {{ $user->llm_service_name ?? 'Not set' }}</p>
-                    <p><strong>ComfyUI URL:</strong> {{ $user->comfyui_url ?? 'Not set' }}</p>
+                    <p><strong>ComfyUI URL:</strong> <span class="text-muted">Hidden</span></p>
                     <p><strong>Created At:</strong> {{ $user->created_at->format('Y-m-d H:i:s') }}</p>
 
                     <a href="{{ route('profile.edit') }}" class="btn btn-primary">Edit Profile</a>

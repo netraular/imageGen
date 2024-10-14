@@ -85,4 +85,18 @@ class User extends Authenticatable
 
         return $maskedApiKey;
     }
+
+    public function getComfyuiUrlAttribute($value)
+    {
+        if (empty($value)) {
+            return null;
+        }
+
+        return Crypt::decryptString($value);
+    }
+
+    public function setComfyuiUrlAttribute($value)
+    {
+        $this->attributes['comfyui_url'] = Crypt::encryptString($value);
+    }
 }
