@@ -27,11 +27,33 @@
 @stop
 
 @section('content')
+    {{-- Mostrar mensajes de éxito o error con botón de cierre --}}
+    @if(session('success'))
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            {{ session('success') }}
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    @endif
+
+    @if(session('error'))
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            {{ session('error') }}
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    @endif
+
+    {{-- Incluir la sección content_body --}}
     @yield('content_body')
 @stop
 
 @push('js')
-
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 @endpush
 
 @push('css')
@@ -49,6 +71,11 @@
 .sidebar-footer {
     padding: 10px;
     border-top: 1px solid #dee2e6;
+}
+
+/* Añade un margen superior al contenido */
+.content-wrapper {
+    padding-top: 20px; /* Ajusta el valor según tu preferencia */
 }
 </style>
 @endpush

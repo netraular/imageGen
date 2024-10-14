@@ -7,6 +7,7 @@ use App\Http\Controllers\TemplateController;
 use App\Http\Controllers\PromptController;
 use App\Http\Controllers\LlmResponseController;
 use App\Http\Controllers\ImageController;
+use App\Http\Controllers\ProfileController;
 
 // Public routes
 Route::get('/', function () {
@@ -30,4 +31,9 @@ Route::middleware(['auth'])->group(function () {
     Route::post('templates/generate', [TemplateController::class, 'generatePrompts'])->name('templates.generate');
     Route::post('prompts/generate', [PromptController::class, 'generateLlmResponses'])->name('prompts.generate');
     Route::post('templates/executePrompts', [TemplateController::class, 'executePrompts'])->name('templates.executePrompts');
+
+    // Profile routes
+    Route::get('profile', [ProfileController::class, 'show'])->name('profile.show');
+    Route::get('profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::put('profile', [ProfileController::class, 'update'])->name('profile.update');
 });
