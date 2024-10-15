@@ -17,7 +17,8 @@ class ElementController extends Controller
         $user = Auth::user();
         $elements = Element::whereHas('category', function ($query) use ($user) {
             $query->where('user_id', $user->id);
-        })->get();
+        })->orderBy('id', 'desc')->get();
+    
         return view('elements.index', compact('elements'));
     }
 
@@ -216,5 +217,24 @@ class ElementController extends Controller
         }
 
         $element->update($request->all());
+    }
+    public function bulkDelete(Request $request)
+    {
+        $elementIds = $request->input('element_ids');
+
+        // Verificar que los elementos pertenecen al usuario actual
+        $user = Auth::user();
+        $elements = Element::whereIn('id', $elementIds)->get();
+
+        foreach ($elements as $element) {
+            if ($element->category->user_id !== $user->id) {
+                return response()->json(['success' => false, 'message' => 'Unauthorized action.']);
+            }
+        }
+
+        // Eliminar los elementos
+        Element::whereIn('id', $elementIds)->delete();
+
+        return response()->json(['success' => true]);
     }
 }

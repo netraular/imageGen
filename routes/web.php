@@ -22,6 +22,7 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 Route::middleware(['auth'])->group(function () {
     Route::resource('categories', CategoryController::class);
     Route::resource('elements', ElementController::class);
+    Route::post('elements/bulkDelete', [ElementController::class, 'bulkDelete'])->name('elements.bulkDelete');
     Route::resource('templates', TemplateController::class);
     Route::resource('prompts', PromptController::class);
     Route::resource('llm_responses', LlmResponseController::class);

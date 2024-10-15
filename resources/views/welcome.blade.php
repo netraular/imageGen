@@ -31,6 +31,7 @@
                 <li><strong>1.0.4:</strong> CRUD operations for categories.</li>
                 <li class="bg-info text-dark"><strong>1.0.5:</strong> CRUD operations for elements.</li>
                 <li><strong>1.0.6:</strong> Add bulk delete or edit.</li>
+                <li><strong>1.0.6.1:</strong> Add alert before deleting items.</li>
             </ul>
         </li>
         <li><strong>Template Creation and Management:</strong>

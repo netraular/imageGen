@@ -32,8 +32,6 @@ class AppServiceProvider extends ServiceProvider
         });
 
         // Forzar que todas las URLs generadas usen HTTPS en ambientes que no sean locales
-        if (env('APP_ENV') !== 'local') {
             URL::forceScheme('https');
-        }
     }
 }
