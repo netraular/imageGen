@@ -3,14 +3,16 @@
 @section('content')
 <div class="container">
     <h1>Crear Nueva Categoría</h1>
-        <button type="button" class="btn btn-outline-success mb-3" id="add-category-field">
-            <i class="bi bi-plus-circle"></i> 
-        </button>
+    <button type="button" class="btn btn-outline-success mb-3" id="add-category-field">
+        <i class="bi bi-plus-circle"></i> Añadir Categoría
+    </button>
     <form action="{{ route('categories.store') }}" method="POST">
         @csrf
         <div id="category-fields">
             <div class="input-group mb-3">
                 <input type="text" name="names[]" class="form-control" placeholder="Nombre de la Categoría" required>
+                <input type="text" name="descriptions[]" class="form-control" placeholder="Descripción de la Categoría">
+                <input type="number" name="orders[]" class="form-control" placeholder="Orden de la Categoría" value="0">
                 <div class="input-group-append">
                     <button type="button" class="btn btn-outline-danger remove-category-field" onclick="removeCategoryField(this)">
                         <i class="bi bi-dash-circle"></i>
@@ -48,6 +50,8 @@
             newField.className = 'input-group mb-3';
             newField.innerHTML = `
                 <input type="text" name="names[]" class="form-control" placeholder="Nombre de la Categoría" required>
+                <input type="text" name="descriptions[]" class="form-control" placeholder="Descripción de la Categoría">
+                <input type="number" name="orders[]" class="form-control" placeholder="Orden de la Categoría" value="0">
                 <div class="input-group-append">
                     <button type="button" class="btn btn-outline-danger remove-category-field" onclick="removeCategoryField(this)">
                         <i class="bi bi-dash-circle"></i>

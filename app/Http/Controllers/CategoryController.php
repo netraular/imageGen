@@ -12,7 +12,7 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        $categories = Category::all();
+        $categories = Category::orderBy('order')->get();
         return view('categories.index', compact('categories'));
     }
 
@@ -33,11 +33,16 @@ class CategoryController extends Controller
         $request->validate([
             'names' => 'required|array|min:1',
             'names.*' => 'required|string|max:255',
+            'descriptions.*' => 'nullable|string',
+            'orders.*' => 'nullable|integer',
         ]);
-
-        // Crear múltiples categorías
-        foreach ($request->names as $name) {
-            Category::create(['name' => $name]);
+        
+        foreach ($request->names as $key => $name) {
+            Category::create([
+                'name' => $name,
+                'description' => $request->descriptions[$key] ?? null,
+                'order' => $request->orders[$key] ?? 0,
+            ]);
         }
 
         return redirect()->route('categories.index')->with('success', 'Categorías creadas exitosamente.');
@@ -66,9 +71,15 @@ class CategoryController extends Controller
     {
         $request->validate([
             'name' => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'order' => 'nullable|integer',
         ]);
-
-        $category->update($request->all());
+        
+        $category->update([
+            'name' => $request->name,
+            'description' => $request->description,
+            'order' => $request->order,
+        ]);
 
         return redirect()->route('categories.index')->with('success', 'Category updated successfully.');
     }

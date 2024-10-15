@@ -7,16 +7,18 @@
     <table class="table">
         <thead>
             <tr>
-                <th>ID</th>
+                <th>Orden</th>
                 <th>Nombre</th>
+                <th>Descripción</th>
                 <th>Acciones</th>
             </tr>
         </thead>
         <tbody>
             @foreach($categories as $category)
             <tr>
-                <td>{{ $category->id }}</td>
+                <td>{{ $category->order }}</td>
                 <td>{{ $category->name }}</td>
+                <td>{{ $category->description }}</td>
                 <td>
                     <a href="{{ route('categories.edit', $category->id) }}" class="btn btn-warning">Editar</a>
                     <form action="{{ route('categories.destroy', $category->id) }}" method="POST" style="display:inline;">

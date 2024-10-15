@@ -10,7 +10,16 @@
             <label for="name">Nombre</label>
             <input type="text" name="name" id="name" class="form-control" value="{{ $category->name }}" required>
         </div>
-        <button type="submit" class="btn btn-primary">Actualizar</button>
+        <div class="form-group">
+            <label for="description">Descripción</label>
+            <textarea name="description" id="description" class="form-control" rows="3">{{ $category->description }}</textarea>
+        </div>
+        <div class="form-group">
+            <label for="order">Orden</label>
+            <input type="number" name="order" id="order" class="form-control" value="{{ $category->order }}">
+        </div>
+        <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+        <a href="{{ route('categories.index') }}" class="btn btn-secondary">Cancelar</a>
     </form>
 </div>
 @endsection
