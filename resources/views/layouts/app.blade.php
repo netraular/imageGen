@@ -46,7 +46,6 @@
         </div>
     @endif
 
-    {{-- Incluir la sección content_body --}}
     @yield('content_body')
 @stop
 
@@ -77,6 +76,16 @@
 /* Añade un margen superior al contenido */
 .content-wrapper {
     padding-top: 20px; /* Ajusta el valor según tu preferencia */
+}
+
+.wrapper {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.content-wrapper {
+    flex: 1;
 }
 </style>
 @endpush
