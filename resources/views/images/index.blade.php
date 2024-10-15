@@ -4,6 +4,7 @@
 <div class="container">
     <h1>Imágenes</h1>
     <a href="{{ route('images.create') }}" class="btn btn-primary">Crear Nueva Imagen</a>
+    <br><br>
     <table class="table">
         <thead>
             <tr>

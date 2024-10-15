@@ -4,6 +4,7 @@
 <div class="container">
     <h1>Plantillas</h1>
     <a href="{{ route('templates.create') }}" class="btn btn-primary">Crear Nueva Plantilla</a>
+    <br><br>
     <table class="table">
         <thead>
             <tr>

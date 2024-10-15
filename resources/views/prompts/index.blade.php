@@ -4,6 +4,7 @@
 <div class="container">
     <h1>Prompts</h1>
     <a href="{{ route('prompts.create') }}" class="btn btn-primary">Crear Nuevo Prompt</a>
+    <br><br>
     <table class="table">
         <thead>
             <tr>

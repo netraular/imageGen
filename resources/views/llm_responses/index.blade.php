@@ -4,6 +4,7 @@
 <div class="container">
     <h1>Respuestas LLM</h1>
     <a href="{{ route('llm_responses.create') }}" class="btn btn-primary">Crear Nueva Respuesta LLM</a>
+    <br><br>
     <table class="table">
         <thead>
             <tr>

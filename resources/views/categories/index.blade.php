@@ -4,6 +4,7 @@
 <div class="container">
     <h1>Categorías</h1>
     <a href="{{ route('categories.create') }}" class="btn btn-primary">Crear Nueva Categoría</a>
+    <br><br>
     <table class="table">
         <thead>
             <tr>

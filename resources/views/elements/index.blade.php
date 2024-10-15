@@ -4,6 +4,7 @@
 <div class="container">
     <h1>Elementos</h1>
     <a href="{{ route('elements.create') }}" class="btn btn-primary">Agregar Nuevo Elemento</a>
+    <br><br>
     <table class="table">
         <thead>
             <tr>
