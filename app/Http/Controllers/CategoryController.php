@@ -29,13 +29,18 @@ class CategoryController extends Controller
      */
     public function store(Request $request)
     {
+        // Validar que se reciba al menos un nombre de categoría
         $request->validate([
-            'name' => 'required|string|max:255',
+            'names' => 'required|array|min:1',
+            'names.*' => 'required|string|max:255',
         ]);
 
-        Category::create($request->all());
+        // Crear múltiples categorías
+        foreach ($request->names as $name) {
+            Category::create(['name' => $name]);
+        }
 
-        return redirect()->route('categories.index')->with('success', 'Category created successfully.');
+        return redirect()->route('categories.index')->with('success', 'Categorías creadas exitosamente.');
     }
 
     /**
