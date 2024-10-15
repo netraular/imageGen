@@ -29,8 +29,8 @@
         <li><strong>Category and Element Management:</strong>
             <ul>
                 <li><strong>1.0.4:</strong> CRUD operations for categories.</li>
-                <li><strong>1.0.5:</strong> CRUD operations for elements.</li>
-                <li><strong>1.0.6:</strong> Validation for category and element names.</li>
+                <li class="bg-info text-dark"><strong>1.0.5:</strong> CRUD operations for elements.</li>
+                <li><strong>1.0.6:</strong> Add bulk delete or edit.</li>
             </ul>
         </li>
         <li><strong>Template Creation and Management:</strong>

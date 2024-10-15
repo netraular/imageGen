@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Element;
 use App\Models\Category;
+use Illuminate\Support\Facades\Auth;
 
 class ElementController extends Controller
 {
@@ -13,7 +14,10 @@ class ElementController extends Controller
      */
     public function index()
     {
-        $elements = Element::all();
+        $user = Auth::user();
+        $elements = Element::whereHas('category', function ($query) use ($user) {
+            $query->where('user_id', $user->id);
+        })->get();
         return view('elements.index', compact('elements'));
     }
 
@@ -22,8 +26,11 @@ class ElementController extends Controller
      */
     public function create()
     {
-        $categories = Category::all();
-        $elements = Element::all();
+        $user = Auth::user();
+        $categories = Category::where('user_id', $user->id)->get();
+        $elements = Element::whereHas('category', function ($query) use ($user) {
+            $query->where('user_id', $user->id);
+        })->get();
         return view('elements.create', compact('categories', 'elements'));
     }
 
@@ -32,31 +39,17 @@ class ElementController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
-            'names' => 'required|array',
-            'names.*' => 'required|string|max:255',
-            'category_id' => 'required|exists:categories,id',
-            'parent_id' => 'nullable|exists:elements,id',
-        ]);
-
-        $parentId = $request->input('parent_id');
-
-        foreach ($request->input('names') as $name) {
-            // Verificar si el nombre del elemento es igual al nombre del padre
-            if ($parentId) {
-                $parentElement = Element::find($parentId);
-                if ($parentElement && $parentElement->name === $name) {
-                    return redirect()->back()->withErrors(['names' => 'El nombre del elemento no puede ser igual al nombre del padre.'])->withInput();
-                }
-            }
-
-            Element::create([
-                'category_id' => $request->input('category_id'),
-                'name' => $name,
-                'parent_id' => $parentId,
-            ]);
+        $this->validateStoreRequest($request);
+        
+        $category = Category::find($request->input('category_id'));
+        $user = Auth::user();
+        if ($category->user_id !== $user->id) {
+            return redirect()->back()->withErrors(['category_id' => 'La categoría seleccionada no pertenece al usuario logueado.'])->withInput();
         }
-
+    
+        $names = $this->getNamesFromStoreRequest($request);
+        $this->createElements($request, $names);
+    
         return redirect()->route('elements.index')->with('success', 'Elements created successfully.');
     }
 
@@ -65,6 +58,10 @@ class ElementController extends Controller
      */
     public function show(Element $element)
     {
+        $user = Auth::user();
+        if ($element->category->user_id !== $user->id) {
+            abort(403, 'Unauthorized action.');
+        }
         return view('elements.show', compact('element'));
     }
 
@@ -73,8 +70,14 @@ class ElementController extends Controller
      */
     public function edit(Element $element)
     {
-        $categories = Category::all();
-        $elements = Element::all();
+        $user = Auth::user();
+        if ($element->category->user_id !== $user->id) {
+            abort(403, 'Unauthorized action.');
+        }
+        $categories = Category::where('user_id', $user->id)->get();
+        $elements = Element::whereHas('category', function ($query) use ($user) {
+            $query->where('user_id', $user->id);
+        })->get();
         return view('elements.edit', compact('element', 'categories', 'elements'));
     }
 
@@ -83,12 +86,125 @@ class ElementController extends Controller
      */
     public function update(Request $request, Element $element)
     {
-        $request->validate([
-            'category_id' => 'required|exists:categories,id',
-            'name' => 'required|string|max:255',
-            'parent_id' => 'nullable|exists:elements,id',
-        ]);
+        $this->validateRequest($request);
+        $category = Category::find($request->input('category_id'));
+        
+        $user = Auth::user();
+        if ($category->user_id !== $user->id) {
+            return redirect()->back()->withErrors(['category_id' => 'La categoría seleccionada no pertenece al usuario logueado.'])->withInput();
+        }
+        $this->updateElement($request, $element);
 
+        return redirect()->route('elements.index')->with('success', 'Element updated successfully.');
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function destroy(Element $element)
+    {
+        $user = Auth::user();
+        if ($element->category->user_id !== $user->id) {
+            abort(403, 'Unauthorized action.');
+        }
+        $element->delete();
+
+        return redirect()->route('elements.index')->with('success', 'Element deleted successfully.');
+    }
+
+    /**
+     * Validate the request.
+     */
+    private function validateStoreRequest(Request $request)
+    {
+        $rules = [
+            'category_id' => 'required|exists:categories,id',
+            'parent_id' => 'nullable|exists:elements,id',
+            'separator' => 'nullable|string',
+            'input_mode' => 'required|in:individual,bulk',
+        ];
+    
+        if ($request->input('input_mode') === 'individual') {
+            $rules['names'] = 'nullable|array'; // Hacer el campo names opcional
+            $rules['names.*'] = 'nullable|string|max:255';
+        } else {
+            $rules['bulk_names'] = 'nullable|string'; // Hacer el campo bulk_names opcional
+        }
+    
+        $request->validate($rules);
+    }
+
+
+    /**
+     * Get the names from the request.
+     */
+    private function getNamesFromStoreRequest(Request $request)
+    {
+        $names = [];
+
+        if ($request->input('input_mode') === 'individual') {
+            $names = $request->input('names', []);
+        } else {
+            $separator = $request->input('separator', 'comma');
+            $bulkNames = [];
+
+            switch ($separator) {
+                case 'comma':
+                    $bulkNames = preg_split('/,/', $request->input('bulk_names'));
+                    break;
+                case 'semicolon':
+                    $bulkNames = preg_split('/;/', $request->input('bulk_names'));
+                    break;
+                case 'space':
+                    $bulkNames = preg_split('/\s+/', $request->input('bulk_names'));
+                    break;
+                case 'tab':
+                    $bulkNames = preg_split('/\t/', $request->input('bulk_names'));
+                    break;
+                case 'newline':
+                    $bulkNames = preg_split('/\n/', $request->input('bulk_names'));
+                    break;
+            }
+
+            $names = array_merge($names, $bulkNames);
+        }
+
+        return $names;
+    }
+
+    /**
+     * Create elements from the names.
+     */
+    private function createElements(Request $request, $names)
+    {
+        $parentId = $request->input('parent_id');
+    
+        foreach ($names as $name) {
+            if (empty($name)) {
+                continue; // No crear un elemento si el nombre está vacío
+            }
+    
+            // Verificar si el nombre del elemento es igual al nombre del padre
+            if ($parentId) {
+                $parentElement = Element::find($parentId);
+                if ($parentElement && $parentElement->name === $name) {
+                    return redirect()->back()->withErrors(['names' => 'El nombre del elemento no puede ser igual al nombre del padre.'])->withInput();
+                }
+            }
+    
+            Element::create([
+                'category_id' => $request->input('category_id'),
+                'name' => $name,
+                'parent_id' => $parentId,
+            ]);
+        }
+    }
+
+    /**
+     * Update the specified element.
+     */
+    private function updateElement(Request $request, Element $element)
+    {
         $parentId = $request->input('parent_id');
 
         // Verificar si el nombre del elemento es igual al nombre del padre
@@ -100,17 +216,5 @@ class ElementController extends Controller
         }
 
         $element->update($request->all());
-
-        return redirect()->route('elements.index')->with('success', 'Element updated successfully.');
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Element $element)
-    {
-        $element->delete();
-
-        return redirect()->route('elements.index')->with('success', 'Element deleted successfully.');
     }
 }
