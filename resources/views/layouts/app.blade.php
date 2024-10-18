@@ -106,5 +106,9 @@
 .dataTables_length select {
     padding-right: 20px;
 }
+.dataTables_length {
+    margin-top: 2px;
+    margin-left:-20px;
+}
 </style>
 @endpush

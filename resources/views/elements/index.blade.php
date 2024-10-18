@@ -9,39 +9,39 @@
 
     <!-- Sección de Filtros -->
     <div id="filters-section" class="card" style="display:none;">
-    <div class="card-header d-flex justify-content-between align-items-center">
-        <h5 class="mb-0">Filtros</h5>
-        <div class="ml-auto">
-            <button id="clear-filters-btn" class="btn btn-link text-secondary">Limpiar Filtros</button>
-            <button id="close-filters-btn" class="btn btn-link text-danger"><i class="bi bi-x-lg"></i></button>
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <h5 class="mb-0">Filtros</h5>
+            <div class="ml-auto">
+                <button id="clear-filters-btn" class="btn btn-link text-secondary">Limpiar Filtros</button>
+                <button id="close-filters-btn" class="btn btn-link text-danger"><i class="bi bi-x-lg"></i></button>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="filter-group">
+                <label for="filter-id">Filtrar por ID</label>
+                <input type="number" id="filter-id" class="form-control" placeholder="ID">
+            </div>
+            <div class="filter-group">
+                <label for="filter-name">Filtrar por Nombre</label>
+                <input type="text" id="filter-name" class="form-control" placeholder="Nombre">
+            </div>
+            <div class="filter-group">
+                <label for="filter-category">Filtrar por Categoría</label>
+                <select id="filter-category" class="form-control">
+                    <option value="">Seleccionar Categoría</option>
+                    @foreach($categories as $category)
+                        <option value="{{ $category->name }}">{{ $category->name }}</option>
+                    @endforeach
+                </select>
+            </div>
         </div>
     </div>
-    <div class="card-body">
-        <div class="filter-group">
-            <label for="filter-id">Filtrar por ID</label>
-            <input type="number" id="filter-id" class="form-control" placeholder="ID">
-        </div>
-        <div class="filter-group">
-            <label for="filter-name">Filtrar por Nombre</label>
-            <input type="text" id="filter-name" class="form-control" placeholder="Nombre">
-        </div>
-        <div class="filter-group">
-            <label for="filter-category">Filtrar por Categoría</label>
-            <select id="filter-category" class="form-control">
-                <option value="">Seleccionar Categoría</option>
-                @foreach($categories as $category)
-                    <option value="{{ $category->name }}">{{ $category->name }}</option>
-                @endforeach
-            </select>
-        </div>
-    </div>
-</div>
 
 
     <!-- Tabla de Elementos -->
     <div class="card">
         <div class="card-body">
-            <table id="elements-table" class="table  table-striped table-bordered table-hover">
+            <table id="elements-table" class="table table-striped table-bordered table-hover">
                 <thead>
                     <tr>
                         <th class="no-sort"><input type="checkbox" id="select-all"></th>
@@ -80,6 +80,7 @@
 
 @section('js')
 <script>
+    //Checkbox select events
     document.addEventListener('DOMContentLoaded', function() {
         const selectAllCheckbox = document.getElementById('select-all');
         const elementCheckboxes = document.querySelectorAll('.element-checkbox');
@@ -172,11 +173,10 @@
             ],
             "order": [[1, "asc"]],
             "dom": '<"row table-container"<"col-sm-6"B><"col-sm-6"f><"col-sm-1">>' +
-                    '<"row table-row-with-margin"<"col-sm-12"tr>>' +
+                    '<"row table-row-with-margin"<"col-sm-12 px-0"tr>>' +
                     '<"row"<"col-sm-5"i><"col-sm-2"l><"col-sm-5"p>>',
 
             buttons: ['copy', 'csv', 'excel', 'pdf', 'print'],
-            "lengthMenu": [10, 25, 50, 100]
         });
         
         // Filtros
@@ -283,8 +283,8 @@
             padding-right: 8px;
         }
         .table-row-with-margin {
-            margin-left: -28px;
-            margin-right: -28px;
+            margin-left: -16px;
+            margin-right: -16px;
         }
         .global-filter-icon {
             margin-left: 10px;
@@ -295,7 +295,8 @@
         .badge {
             font-size: 0.75rem;
         }
-
-
+        .card-body{
+            overflow-x:auto;
+        }
     </style>
 @endsection
