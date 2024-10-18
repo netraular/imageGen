@@ -3,7 +3,7 @@
 @section('content')
 <div class="container">
     <h1>Elementos</h1>
-    <a href="{{ route('elements.create') }}" class="btn btn-primary">Agregar Nuevo Elemento</a>
+    <a href="{{ route('elements.create') }}" class="btn  btn-primary">Agregar Nuevo Elemento</a>
     <button id="bulk-delete-btn" class="btn btn-danger" style="display:none;">Eliminar Seleccionados</button>
     <br><br>
 
@@ -41,7 +41,7 @@
     <!-- Tabla de Elementos -->
     <div class="card">
         <div class="card-body">
-            <table id="elements-table" class="table  table-striped table-hover">
+            <table id="elements-table" class="table  table-striped table-bordered table-hover">
                 <thead>
                     <tr>
                         <th class="no-sort"><input type="checkbox" id="select-all"></th>
@@ -59,11 +59,11 @@
                         <td>{{ $element->name }}</td>
                         <td>{{ $element->category->name }}</td>
                         <td>
-                            <a href="{{ route('elements.edit', $element->id) }}" class="btn btn-warning">Editar</a>
+                            <a href="{{ route('elements.edit', $element->id) }}" class="btn btn-sm btn-warning">Editar</a>
                             <form action="{{ route('elements.destroy', $element->id) }}" method="POST" style="display:inline;">
                                 @csrf
                                 @method('DELETE')
-                                <button type="submit" class="btn btn-danger">Eliminar</button>
+                                <button type="submit" class="btn btn-sm btn-danger">Eliminar</button>
                             </form>
                         </td>
                     </tr>
