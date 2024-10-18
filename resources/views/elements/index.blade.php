@@ -9,31 +9,34 @@
 
     <!-- Sección de Filtros -->
     <div id="filters-section" class="card" style="display:none;">
-        <div class="card-header d-flex justify-content-between align-items-center">
-            <h5 class="mb-0">Filtros</h5>
-            <button id="close-filters-btn" class="btn btn-link text-danger ml-auto"><i class="bi bi-x-lg"></i></button>
-        </div>
-        <div class="card-body">
-            <div class="filter-group">
-                <label for="filter-id">Filtrar por ID</label>
-                <input type="number" id="filter-id" class="form-control" placeholder="ID">
-            </div>
-            <div class="filter-group">
-                <label for="filter-name">Filtrar por Nombre</label>
-                <input type="text" id="filter-name" class="form-control" placeholder="Nombre">
-            </div>
-            <div class="filter-group">
-                <label for="filter-category">Filtrar por Categoría</label>
-                <select id="filter-category" class="form-control">
-                    <option value="">Seleccionar Categoría</option>
-                    @foreach($categories as $category)
-                        <option value="{{ $category->name }}">{{ $category->name }}</option>
-                    @endforeach
-                </select>
-            </div>
-            <button id="apply-all-filters-btn" class="btn btn-primary mt-3">Aplicar Todos los Filtros</button>
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <h5 class="mb-0">Filtros</h5>
+        <div class="ml-auto">
+            <button id="clear-filters-btn" class="btn btn-link text-secondary">Limpiar Filtros</button>
+            <button id="close-filters-btn" class="btn btn-link text-danger"><i class="bi bi-x-lg"></i></button>
         </div>
     </div>
+    <div class="card-body">
+        <div class="filter-group">
+            <label for="filter-id">Filtrar por ID</label>
+            <input type="number" id="filter-id" class="form-control" placeholder="ID">
+        </div>
+        <div class="filter-group">
+            <label for="filter-name">Filtrar por Nombre</label>
+            <input type="text" id="filter-name" class="form-control" placeholder="Nombre">
+        </div>
+        <div class="filter-group">
+            <label for="filter-category">Filtrar por Categoría</label>
+            <select id="filter-category" class="form-control">
+                <option value="">Seleccionar Categoría</option>
+                @foreach($categories as $category)
+                    <option value="{{ $category->name }}">{{ $category->name }}</option>
+                @endforeach
+            </select>
+        </div>
+    </div>
+</div>
+
 
     <!-- Tabla de Elementos -->
     <div class="card">
@@ -177,34 +180,91 @@
         });
         
         // Filtros
-        $('#elements-table_filter').append('<button id="toggle-filters-btn" class="btn btn-outline-secondary global-filter-icon"><i class="bi bi-funnel"></i></button>');
+        $('#elements-table_filter').append(`
+            <button id="toggle-filters-btn" class="btn btn-outline-secondary global-filter-icon position-relative">
+                <i id="filter-icon" class="bi bi-funnel"></i>
+                <span id="filter-counter" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="display:none;">0</span>
+            </button>
+        `);
         
-        const closeFiltersBtn = document.getElementById('close-filters-btn');
-
-        closeFiltersBtn.addEventListener('click', function() {
-            filtersSection.style.display = 'none';
-        });
-
-        const applyAllFiltersBtn = document.getElementById('apply-all-filters-btn');
-
-        // Toggle Filters Section
         const toggleFiltersBtn = document.getElementById('toggle-filters-btn');
         const filtersSection = document.getElementById('filters-section');
+        const filterIcon = document.getElementById('filter-icon');
+        const filterCounter = document.getElementById('filter-counter');
+        const filterIdInput = document.getElementById('filter-id');
+        const filterNameInput = document.getElementById('filter-name');
+        const filterCategorySelect = document.getElementById('filter-category');
+        const clearFiltersBtn = document.getElementById('clear-filters-btn');
+        let activeFilters = 0;
 
-        toggleFiltersBtn.addEventListener('click', function() {
-            filtersSection.style.display = filtersSection.style.display === 'none' ? 'block' : 'none';
-        });
+        // Función para contar y mostrar el número de filtros activos
+        function updateFilterCounter() {
+            activeFilters = 0;
 
-        applyAllFiltersBtn.addEventListener('click', function() {
+            const filterId = document.getElementById('filter-id').value.trim();
+            const filterName = document.getElementById('filter-name').value.trim();
+            const filterCategory = document.getElementById('filter-category').value.trim();
+
+            // Si hay valores en los filtros, aumentamos el contador de filtros activos
+            if (filterId !== "") activeFilters++;
+            if (filterName !== "") activeFilters++;
+            if (filterCategory !== "") activeFilters++;
+
+            // Actualizamos el icono y el contador
+            if (activeFilters > 0) {
+                filterIcon.classList.remove('bi-funnel');
+                filterIcon.classList.add('bi-funnel-fill');
+                filterCounter.textContent = activeFilters;
+                filterCounter.style.display = 'inline';  // Muestra el contador
+            } else {
+                filterIcon.classList.remove('bi-funnel-fill');
+                filterIcon.classList.add('bi-funnel');
+                filterCounter.style.display = 'none';  // Oculta el contador
+            }
+        }
+
+
+        // Función para aplicar los filtros a la tabla
+        function applyFilters() {
             const filterId = document.getElementById('filter-id').value;
             const filterName = document.getElementById('filter-name').value;
             const filterCategory = document.getElementById('filter-category').value;
 
+            // Aplicar los filtros a las columnas de la DataTable
             table.column(1).search(filterId).draw();
             table.column(2).search(filterName).draw();
             table.column(3).search(filterCategory).draw();
+
+            // Actualizamos el contador de filtros activos
+            updateFilterCounter();
+        }
+
+        // Eventos para los campos de filtro para que apliquen los filtros en tiempo real
+        filterIdInput.addEventListener('input', applyFilters);
+        filterNameInput.addEventListener('input', applyFilters);
+        filterCategorySelect.addEventListener('change', applyFilters);
+
+        // Evento para limpiar todos los filtros
+        clearFiltersBtn.addEventListener('click', function() {
+            // Limpiar los campos de filtro
+            filterIdInput.value = '';
+            filterNameInput.value = '';
+            filterCategorySelect.value = '';
+
+            // Aplicar filtros vacíos (lo que efectivamente limpia los filtros)
+            applyFilters();
         });
+        
+        // Toggle Filters Section
+        toggleFiltersBtn.addEventListener('click', function() {
+            filtersSection.style.display = filtersSection.style.display === 'none' ? 'block' : 'none';
+        });
+
+        // Cerrar el panel de filtros
+        document.getElementById('close-filters-btn').addEventListener('click', function() {
+        filtersSection.style.display = 'none';
     });
+});
 </script>
 @endsection
 
@@ -216,9 +276,19 @@
             padding-right: 8px;
         }
         .table-row-with-margin {
-    margin-left: -28px;
-    margin-right: -28px;
-}
+            margin-left: -28px;
+            margin-right: -28px;
+        }
+        .global-filter-icon {
+            margin-left: 10px;
+            padding-left: 8px;
+            padding-right: 8px;
+        }
+
+        .badge {
+            font-size: 0.75rem;
+        }
+
 
     </style>
 @endsection
