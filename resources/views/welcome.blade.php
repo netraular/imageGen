@@ -29,9 +29,12 @@
         <li><strong>Category and Element Management:</strong>
             <ul>
                 <li><strong>1.0.4:</strong> CRUD operations for categories.</li>
-                <li class="bg-info text-dark"><strong>1.0.5:</strong> CRUD operations for elements.</li>
+                <li ><strong>1.0.5:</strong> CRUD operations for elements.</li>
                 <li><strong>1.0.6:</strong> Add bulk delete or edit.</li>
-                <li><strong>1.0.6.1:</strong> Add alert before deleting items.</li>
+                <li class="bg-info text-dark"><strong>1.0.6*:</strong> Arreglar validación update element.</li>
+                <li ><strong>1.0.6.1:</strong> Add alert before deleting items.</li>
+                <li><strong>1.0.6.2:</strong> Permitir filtrar y ordenar tablas.</li>
+                <li><strong>1.0.6.3:</strong> Realizar todas las vistas en inglés.</li>
             </ul>
         </li>
         <li><strong>Template Creation and Management:</strong>
@@ -39,6 +42,7 @@
                 <li><strong>1.0.7:</strong> CRUD operations for templates.</li>
                 <li><strong>1.0.8:</strong> Automatic generation of permutations of elements within categories.</li>
                 <li><strong>1.0.9:</strong> Validation for template placeholders.</li>
+                <li><strong>1.0.9.1:</strong> Realizar todas las vistas en inglés.</li>
             </ul>
         </li>
         <li><strong>Prompt Generation and LLM Integration:</strong>

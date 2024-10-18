@@ -19,7 +19,9 @@ class ElementController extends Controller
             $query->where('user_id', $user->id);
         })->orderBy('id', 'desc')->get();
     
-        return view('elements.index', compact('elements'));
+        $categories = Category::where('user_id', $user->id)->get();
+    
+        return view('elements.index', compact('elements', 'categories'));
     }
 
     /**
@@ -87,7 +89,7 @@ class ElementController extends Controller
      */
     public function update(Request $request, Element $element)
     {
-        $this->validateRequest($request);
+        $this->validateUpdateRequest($request);
         $category = Category::find($request->input('category_id'));
         
         $user = Auth::user();
@@ -116,6 +118,15 @@ class ElementController extends Controller
     /**
      * Validate the request.
      */
+    private function validateUpdateRequest(Request $request){
+        $rules = [
+            'name' => 'required|string|max:255',
+            'category_id' => 'required|exists:categories,id',
+            'parent_id' => 'nullable|exists:elements,id',
+        ];    
+        $request->validate($rules);
+
+    }
     private function validateStoreRequest(Request $request)
     {
         $rules = [

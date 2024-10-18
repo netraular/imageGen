@@ -1,5 +1,4 @@
 <link rel="icon" href="{{ url('favicon.png') }}">
-
 @extends('adminlte::page')
 
 {{-- Extend and customize the browser title --}}
@@ -72,16 +71,17 @@
 @vite(['resources/sass/app.scss'])
 
 <style>
+/* Hace que el sidebar ocupe todo el alto de la ventana */
 .main-sidebar {
-    height: 100vh; /* Ocupa todo el alto de la ventana */
+    height: 100vh; 
     display: flex;
     flex-direction: column;
 }
-
+/* Hace que el sidebar ocupe el espacio restante */
 .sidebar {
-    flex: 1; /* Hace que el sidebar ocupe el espacio restante */
+    flex: 1; 
 }
-
+/* Hace que el sidebar-footer ocupe el espacio restante */
 .sidebar-footer {
     padding: 10px;
     border-top: 1px solid #dee2e6;
@@ -92,14 +92,19 @@
     padding-top: 20px; /* Ajusta el valor según tu preferencia */
 }
 
+/*Hacer que todo el fondo sea del mismo color gris, no solo el alto de la ventana */
 .wrapper {
     min-height: 100vh;
     display: flex;
     flex-direction: column;
 }
-
 .content-wrapper {
     flex: 1;
+}
+
+/* Añadir padding-right al select de DataTables */
+.dataTables_length select {
+    padding-right: 20px;
 }
 </style>
 @endpush

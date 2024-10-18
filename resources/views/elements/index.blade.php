@@ -4,17 +4,48 @@
 <div class="container">
     <h1>Elementos</h1>
     <a href="{{ route('elements.create') }}" class="btn btn-primary">Agregar Nuevo Elemento</a>
-    <!-- <button id="bulk-edit-btn" class="btn btn-warning" style="display:none;">Editar Seleccionados</button> -->
     <button id="bulk-delete-btn" class="btn btn-danger" style="display:none;">Eliminar Seleccionados</button>
     <br><br>
-    <table class="table">
+
+    <!-- Sección de Filtros -->
+    <div id="filters-section" class="card" style="display:none;">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-4">
+                    <input type="number" id="filter-id" class="form-control" placeholder="Filtrar por ID">
+                </div>
+                <div class="col-md-4">
+                    <input type="text" id="filter-name" class="form-control" placeholder="Filtrar por Nombre">
+                </div>
+                <div class="col-md-4">
+                    <select id="filter-category" class="form-control">
+                        <option value="">Seleccionar Categoría</option>
+                        @foreach($categories as $category)
+                            <option value="{{ $category->name }}">{{ $category->name }}</option>
+                        @endforeach
+                    </select>
+                </div>
+            </div>
+            <br>
+            <button class="btn btn-primary btn-apply-filter" data-column="1">Filtrar por ID</button>
+            <button class="btn btn-primary btn-apply-filter" data-column="2">Filtrar por Nombre</button>
+            <button class="btn btn-primary btn-apply-filter" data-column="3">Filtrar por Categoría</button>
+        </div>
+    </div>
+
+    <!-- Botón Funnel -->
+
+    <br><br>
+
+    <!-- Tabla de Elementos -->
+    <table id="elements-table" class="table table-bordered table-striped">
         <thead>
             <tr>
-                <th><input type="checkbox" id="select-all"></th>
+                <th class="no-sort"><input type="checkbox" id="select-all"></th>
                 <th>ID</th>
                 <th>Nombre</th>
                 <th>Categoría</th>
-                <th>Acciones</th>
+                <th class="no-sort">Acciones</th>
             </tr>
         </thead>
         <tbody>
@@ -42,7 +73,6 @@
     document.addEventListener('DOMContentLoaded', function() {
         const selectAllCheckbox = document.getElementById('select-all');
         const elementCheckboxes = document.querySelectorAll('.element-checkbox');
-        // const bulkEditBtn = document.getElementById('bulk-edit-btn');
         const bulkDeleteBtn = document.getElementById('bulk-delete-btn');
 
         selectAllCheckbox.addEventListener('change', function() {
@@ -59,10 +89,8 @@
         function updateBulkButtons() {
             const checkedCheckboxes = document.querySelectorAll('.element-checkbox:checked');
             if (checkedCheckboxes.length > 0) {
-                // bulkEditBtn.style.display = 'inline-block';
                 bulkDeleteBtn.style.display = 'inline-block';
             } else {
-                // bulkEditBtn.style.display = 'none';
                 bulkDeleteBtn.style.display = 'none';
             }
         }
@@ -89,6 +117,76 @@
                   });
             }
         });
+
+
+        // Apply Filters
+        const applyFilterButtons = document.querySelectorAll('.btn-apply-filter');
+        const table = $('#elements-table').DataTable({
+            "paging": true,
+            "lengthChange": true,
+            "searching": true,
+            "ordering": true,
+            "info": true,
+            "autoWidth": false,
+            "responsive": true,
+            "language": {
+                "info": "Mostrando _START_ a _END_ de _TOTAL_ registros",
+                "paginate": {
+                    "previous": "&#9664;", 
+                    "next": "&#9654;" 
+                },
+                "lengthMenu": "Mostrar _MENU_"
+            },
+            "columnDefs": [
+                { "orderable": false, "targets": 'no-sort' }
+            ],
+            "dom": '<"row"<"col-sm-6"B><"col-sm-6"f><"col-sm-1">>' +
+                '<"row"<"col-sm-12"tr>>' +
+                '<"row"<"col-sm-5"i><"col-sm-2"l><"col-sm-5"p>>',
+            buttons: ['copy', 'csv', 'excel', 'pdf', 'print'],
+            "lengthMenu": [10, 25, 50, 100]
+        });
+
+        // Agregar el botón de filtro al DOM
+        $('#elements-table_filter').append('<button id="toggle-filters-btn" class="btn btn-outline-secondary global-filter-icon"><i class="bi bi-funnel"></i></button>');
+
+        // Toggle Filters Section
+        const toggleFiltersBtn = document.getElementById('toggle-filters-btn');
+        const filtersSection = document.getElementById('filters-section');
+
+        toggleFiltersBtn.addEventListener('click', function() {
+            filtersSection.style.display = filtersSection.style.display === 'none' ? 'block' : 'none';
+        });
+
+        applyFilterButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const column = this.getAttribute('data-column');
+                let value;
+
+                if (column === '1') {
+                    value = document.getElementById('filter-id').value;
+                } else if (column === '2') {
+                    value = document.getElementById('filter-name').value;
+                } else if (column === '3') {
+                    value = document.getElementById('filter-category').value;
+                }
+
+                table.column(column).search(value).draw();
+            });
+        });
     });
 </script>
+@endsection
+
+@section('plugins.Datatables', true)
+@section('plugins.DatatablesPlugins', true)
+
+@section('css')
+    <style>
+        .global-filter-icon {
+            margin-left: 10px;
+            padding-left: 8px;
+            padding-right: 8px;
+        }
+    </style>
 @endsection
