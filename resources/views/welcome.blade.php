@@ -11,6 +11,8 @@
 @section('content_body')
     <h1>Project Summary and Roadmap</h1>
     <h2>Project Summary</h2>
+    Tengo una web hecha en laravel, con bootstrap, adminlte y datatables.
+
     <p>The project aims to create a web-based platform that leverages Large Language Models (LLMs) to generate multiple texts based on user-defined templates. Users can create, manage, and visualize various categories and elements, formulate template sentences, and generate permutations of these templates to produce a wide range of text outputs. Additionally, the platform supports the generation of images related to the text outputs, providing a comprehensive tool for creative content generation and management. Core functionalities include user authentication and management, category and element management, template creation and management, prompt generation and LLM integration, image generation and management, visualization and filtering, job scheduling and notification, additional content generation, and robust database management.</p>
     <p>Enhanced functionalities will include advanced search and filtering, analytics and reporting, customizable LLM parameters, content export and import, collaboration and sharing, role-based access control, version control, integration with external tools, content moderation, customizable user interface, user feedback and ratings, AI-powered suggestions, performance optimization, scheduled content generation, and multi-language support. The design and user experience (UX/UI) will focus on creating an intuitive and responsive user interface with a clear navigation structure, ensuring a comprehensive and user-friendly platform for generating, managing, and visualizing creative content using LLMs and image generation APIs.</p>
 

@@ -60,7 +60,7 @@
                         <td>{{ $element->category->name }}</td>
                         <td>
                             <a href="{{ route('elements.edit', $element->id) }}" class="btn btn-sm btn-warning">Editar</a>
-                            <form action="{{ route('elements.destroy', $element->id) }}" method="POST" style="display:inline;">
+                            <form action="{{ route('elements.destroy', $element->id) }}" method="POST" style="display:inline;" onsubmit="return confirmDelete(event)">
                                 @csrf
                                 @method('DELETE')
                                 <button type="submit" class="btn btn-sm btn-danger">Eliminar</button>
@@ -86,7 +86,7 @@
         const bulkDeleteBtn = document.getElementById('bulk-delete-btn');
         let selectedElementIds = [];
 
-        // Función para actualizar el estado de los botones masivos
+        // Función para actualizar el estado de todos los elementos seleccionados
         function updateBulkButtons() {
             if (selectedElementIds.length > 0) {
                 bulkDeleteBtn.style.display = 'inline-block';
@@ -265,6 +265,13 @@
         filtersSection.style.display = 'none';
     });
 });
+</script>
+<script>
+    function confirmDelete(event) {
+        if (!confirm('¿Estás seguro de que quieres eliminar este elemento?')) {
+            event.preventDefault(); // Evita que el formulario se envíe si el usuario cancela
+        }
+    }
 </script>
 @endsection
 
