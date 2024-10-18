@@ -11,7 +11,7 @@
     <div id="filters-section" class="card" style="display:none;">
         <div class="card-header d-flex justify-content-between align-items-center">
             <h5 class="mb-0">Filtros</h5>
-            <button id="close-filters-btn" class="btn btn-link text-danger"><i class="bi bi-x-lg"></i></button>
+            <button id="close-filters-btn" class="btn btn-link text-danger ml-auto"><i class="bi bi-x-lg"></i></button>
         </div>
         <div class="card-body">
             <div class="filter-group">
@@ -36,35 +36,39 @@
     </div>
 
     <!-- Tabla de Elementos -->
-    <table id="elements-table" class="table table-bordered table-striped">
-        <thead>
-            <tr>
-                <th class="no-sort"><input type="checkbox" id="select-all"></th>
-                <th>ID</th>
-                <th>Nombre</th>
-                <th>Categoría</th>
-                <th class="no-sort">Acciones</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach($elements as $element)
-            <tr>
-                <td><input type="checkbox" class="element-checkbox" data-id="{{ $element->id }}"></td>
-                <td>{{ $element->id }}</td>
-                <td>{{ $element->name }}</td>
-                <td>{{ $element->category->name }}</td>
-                <td>
-                    <a href="{{ route('elements.edit', $element->id) }}" class="btn btn-warning">Editar</a>
-                    <form action="{{ route('elements.destroy', $element->id) }}" method="POST" style="display:inline;">
-                        @csrf
-                        @method('DELETE')
-                        <button type="submit" class="btn btn-danger">Eliminar</button>
-                    </form>
-                </td>
-            </tr>
-            @endforeach
-        </tbody>
-    </table>
+    <div class="card">
+        <div class="card-body">
+            <table id="elements-table" class="table  table-striped table-hover">
+                <thead>
+                    <tr>
+                        <th class="no-sort"><input type="checkbox" id="select-all"></th>
+                        <th>ID</th>
+                        <th>Nombre</th>
+                        <th>Categoría</th>
+                        <th class="no-sort">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach($elements as $element)
+                    <tr>
+                        <td><input type="checkbox" class="element-checkbox" data-id="{{ $element->id }}"></td>
+                        <td>{{ $element->id }}</td>
+                        <td>{{ $element->name }}</td>
+                        <td>{{ $element->category->name }}</td>
+                        <td>
+                            <a href="{{ route('elements.edit', $element->id) }}" class="btn btn-warning">Editar</a>
+                            <form action="{{ route('elements.destroy', $element->id) }}" method="POST" style="display:inline;">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn btn-danger">Eliminar</button>
+                            </form>
+                        </td>
+                    </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
+    </div>
 </div>
 @endsection
 
@@ -158,22 +162,20 @@
                     "previous": "&#9664;", 
                     "next": "&#9654;" 
                 },
-                "lengthMenu": "Mostrar _MENU_"
+                "lengthMenu": "Mostrar _MENU_",
             },
             "columnDefs": [
                 { "orderable": false, "targets": 'no-sort' }
             ],
             "order": [[1, "asc"]],
-            "dom": '<"row"<"col-sm-6"B><"col-sm-6"f><"col-sm-1">>' +
-                '<"row"<"col-sm-12"tr>>' +
-                '<"row"<"col-sm-5"i><"col-sm-2"l><"col-sm-5"p>>',
+            "dom": '<"row table-container"<"col-sm-6"B><"col-sm-6"f><"col-sm-1">>' +
+                    '<"row table-row-with-margin"<"col-sm-12"tr>>' +
+                    '<"row"<"col-sm-5"i><"col-sm-2"l><"col-sm-5"p>>',
+
             buttons: ['copy', 'csv', 'excel', 'pdf', 'print'],
             "lengthMenu": [10, 25, 50, 100]
         });
-    });
-</script>
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
+        
         // Filtros
         $('#elements-table_filter').append('<button id="toggle-filters-btn" class="btn btn-outline-secondary global-filter-icon"><i class="bi bi-funnel"></i></button>');
         
@@ -213,5 +215,10 @@
             padding-left: 8px;
             padding-right: 8px;
         }
+        .table-row-with-margin {
+    margin-left: -28px;
+    margin-right: -28px;
+}
+
     </style>
 @endsection
