@@ -36,7 +36,11 @@ class ElementController extends Controller
         })->get();
         return view('elements.create', compact('categories', 'elements'));
     }
-
+    public function getParentElementsByCategory($categoryId)
+    {
+        $elements = Element::where('category_id', $categoryId)->get();
+        return response()->json($elements);
+    }
     /**
      * Store a newly created resource in storage.
      */
@@ -141,6 +145,9 @@ class ElementController extends Controller
             $rules['names.*'] = 'nullable|string|max:255';
         } else {
             $rules['bulk_names'] = 'nullable|string'; // Hacer el campo bulk_names opcional
+            if ($request->input('separator') === 'json') {
+                $rules['bulk_names'] = 'required|json'; // Validar que el campo bulk_names sea un JSON válido
+            }
         }
     
         $request->validate($rules);
@@ -151,38 +158,48 @@ class ElementController extends Controller
      * Get the names from the request.
      */
     private function getNamesFromStoreRequest(Request $request)
-    {
-        $names = [];
+{
+    $names = [];
 
-        if ($request->input('input_mode') === 'individual') {
-            $names = $request->input('names', []);
-        } else {
-            $separator = $request->input('separator', 'comma');
-            $bulkNames = [];
+    if ($request->input('input_mode') === 'individual') {
+        $names = $request->input('names', []);
+    } else {
+        $separator = $request->input('separator', 'comma');
+        $bulkNames = [];
 
-            switch ($separator) {
-                case 'comma':
-                    $bulkNames = preg_split('/,/', $request->input('bulk_names'));
-                    break;
-                case 'semicolon':
-                    $bulkNames = preg_split('/;/', $request->input('bulk_names'));
-                    break;
-                case 'space':
-                    $bulkNames = preg_split('/\s+/', $request->input('bulk_names'));
-                    break;
-                case 'tab':
-                    $bulkNames = preg_split('/\t/', $request->input('bulk_names'));
-                    break;
-                case 'newline':
-                    $bulkNames = preg_split('/\n/', $request->input('bulk_names'));
-                    break;
-            }
-
-            $names = array_merge($names, $bulkNames);
+        switch ($separator) {
+            case 'comma':
+                $bulkNames = preg_split('/,/', $request->input('bulk_names'));
+                break;
+            case 'semicolon':
+                $bulkNames = preg_split('/;/', $request->input('bulk_names'));
+                break;
+            case 'space':
+                $bulkNames = preg_split('/\s+/', $request->input('bulk_names'));
+                break;
+            case 'tab':
+                $bulkNames = preg_split('/\t/', $request->input('bulk_names'));
+                break;
+            case 'newline':
+                $bulkNames = preg_split('/\n/', $request->input('bulk_names'));
+                break;
+            case 'json':
+                $json = json_decode($request->input('bulk_names'), true);
+                if (is_array($json)) {
+                    foreach ($json as $key => $value) {
+                        if (is_array($value)) {
+                            $bulkNames = array_merge($bulkNames, $value);
+                        }
+                    }
+                }
+                break;
         }
 
-        return $names;
+        $names = array_merge($names, $bulkNames);
     }
+
+    return $names;
+}
 
     /**
      * Create elements from the names.

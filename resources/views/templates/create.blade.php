@@ -7,7 +7,7 @@
         @csrf
         <div class="form-group">
             <label for="sentence">Frase</label>
-            <input type="text" name="sentence" id="sentence" class="form-control" required>
+            <textarea name="sentence" id="sentence" class="form-control" rows="5" required></textarea>
         </div>
         <button type="submit" class="btn btn-primary">Guardar</button>
     </form>

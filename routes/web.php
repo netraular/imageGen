@@ -23,6 +23,7 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('categories', CategoryController::class);
     Route::resource('elements', ElementController::class);
     Route::post('elements/bulkDelete', [ElementController::class, 'bulkDelete'])->name('elements.bulkDelete');
+    Route::get('/elements/parent-elements/{categoryId}', [ElementController::class, 'getParentElementsByCategory']);
     Route::resource('templates', TemplateController::class);
     Route::resource('prompts', PromptController::class);
     Route::resource('llm_responses', LlmResponseController::class);

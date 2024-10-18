@@ -18,9 +18,7 @@
             <i class="bi bi-plus-circle"></i> 
         </button>
 
-
         <div class="form-group" id="element-fields">
-
             <div class="input-group mb-3">
                 <input type="text" name="names[]" class="form-control" placeholder="Nombre del Elemento" >
                 <div class="input-group-append">
@@ -35,11 +33,12 @@
             <textarea name="bulk_names" id="bulk_names" class="form-control" rows="5"></textarea>
             <label for="separator">Seleccionar separador:</label>
             <select name="separator" id="separator" class="form-control">
+                <option value="newline">Salto de línea (Enter)</option>
                 <option value="comma">Coma (,)</option>
                 <option value="semicolon">Punto y coma (;)</option>
                 <option value="space">Espacio ( )</option>
                 <option value="tab">Tabulación (Tab)</option>
-                <option value="newline">Salto de línea (Enter)</option>
+                <option value="json">Json</option>
             </select>
         </div>
         <div class="form-group">
@@ -54,12 +53,18 @@
             @enderror
         </div>
         <div class="form-group">
+            <label for="parent_category_id">Categoría del Elemento Padre (Opcional)</label>
+            <select name="parent_category_id" id="parent_category_id" class="form-control" onchange="loadParentElements(this.value)">
+                <option value="">Ninguno</option>
+                @foreach($categories as $category)
+                <option value="{{ $category->id }}">{{ $category->name }}</option>
+                @endforeach
+            </select>
+        </div>
+        <div class="form-group">
             <label for="parent_id">Elemento Padre (Opcional)</label>
             <select name="parent_id" id="parent_id" class="form-control">
                 <option value="">Ninguno</option>
-                @foreach($elements as $element)
-                <option value="{{ $element->id }}">{{ $element->name }}</option>
-                @endforeach
             </select>
             @error('parent_id')
                 <div class="alert alert-danger">{{ $message }}</div>
@@ -76,6 +81,28 @@
     function removeElementField(button) {
         button.closest('.input-group').remove();
         checkAllInputs();
+    }
+
+    // Definir la función loadParentElements en el ámbito global
+    function loadParentElements(categoryId) {
+        const parentIdSelect = document.getElementById('parent_id');
+        parentIdSelect.innerHTML = '<option value="">Cargando...</option>';
+
+        if (categoryId) {
+            fetch(`/elements/parent-elements/${categoryId}`)
+                .then(response => response.json())
+                .then(data => {
+                    parentIdSelect.innerHTML = '<option value="">Ninguno</option>';
+                    data.forEach(element => {
+                        const option = document.createElement('option');
+                        option.value = element.id;
+                        option.text = element.name;
+                        parentIdSelect.appendChild(option);
+                    });
+                });
+        } else {
+            parentIdSelect.innerHTML = '<option value="">Ninguno</option>';
+        }
     }
 
     $(document).ready(function() {
