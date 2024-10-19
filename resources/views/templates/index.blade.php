@@ -20,7 +20,7 @@
                     @foreach($templates as $template)
                     <tr>
                         <td>{{ $template->id }}</td>
-                        <td>{{ $template->sentence }}</td>
+                        <td>{!! nl2br(e($template->sentence)) !!}</td>
                         <td>
                             <a href="{{ route('templates.edit', $template->id) }}" class="btn btn-sm btn-warning">Editar</a>
                             <form action="{{ route('templates.destroy', $template->id) }}" method="POST" style="display:inline;">

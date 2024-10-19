@@ -63,7 +63,7 @@
         </div>
         <div class="form-group">
             <label for="parent_id">Elemento Padre (Opcional)</label>
-            <select name="parent_id" id="parent_id" class="form-control">
+            <select name="parent_id" id="parent_id" class="form-control" >
                 <option value="">Ninguno</option>
             </select>
             @error('parent_id')
@@ -85,23 +85,21 @@
 
     // Definir la función loadParentElements en el ámbito global
     function loadParentElements(categoryId) {
-        const parentIdSelect = document.getElementById('parent_id');
-        parentIdSelect.innerHTML = '<option value="">Cargando...</option>';
+        const parentIdSelect = $('#parent_id');
+        parentIdSelect.html('<option value="">Cargando...</option>');
 
         if (categoryId) {
             fetch(`/elements/parent-elements/${categoryId}`)
                 .then(response => response.json())
                 .then(data => {
-                    parentIdSelect.innerHTML = '<option value="">Ninguno</option>';
+                    parentIdSelect.html('<option value="">Ninguno</option>');
                     data.forEach(element => {
-                        const option = document.createElement('option');
-                        option.value = element.id;
-                        option.text = element.name;
-                        parentIdSelect.appendChild(option);
+                        const option = new Option(element.name, element.id, false, false);
+                        parentIdSelect.append(option).trigger('change');
                     });
                 });
         } else {
-            parentIdSelect.innerHTML = '<option value="">Ninguno</option>';
+            parentIdSelect.html('<option value="">Ninguno</option>');
         }
     }
 
@@ -159,6 +157,14 @@
                 addElementField();
             }
         }
+
+        // Inicializar select2 en el dropdown "Elemento Padre (Opcional)" con estilos de Bootstrap
+        $('#parent_id').select2({
+            placeholder: 'Ninguno',
+            allowClear: true,
+            width:'100%',
+            theme: 'bootstrap-5',
+        });
     });
 </script>
 @endpush
