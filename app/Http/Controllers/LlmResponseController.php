@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\LlmResponse;
 use App\Models\Prompt;
+use App\Jobs\GenerateLlmResponseJob;
 
 class LlmResponseController extends Controller
 {
@@ -84,4 +85,17 @@ class LlmResponseController extends Controller
 
         return redirect()->route('llm_responses.index')->with('success', 'LLM Response deleted successfully.');
     }
+
+    public function regenerate(LlmResponse $llmResponse)
+{
+    // Actualizar el estado a "pending"
+    $llmResponse->update([
+        'status' => 'pending',
+    ]);
+
+    // Encolar el job
+    GenerateLlmResponseJob::dispatch($llmResponse->prompt);
+
+    return redirect()->route('llm_responses.index')->with('success', 'LLM Response regenerated successfully.');
+}
 }

@@ -9,10 +9,54 @@
 {{-- Content body: main page content --}}
 
 @section('content_body')
+
+<div>
+<div class="container mt-5">  
+    Tengo una web hecha en laravel, con bootstrap, adminlte y datatables.
+    <div class="card">
+        <div class="card-header bg-info text-white">
+            <h2 class="mb-0">Tareas Pendientes</h2>
+        </div>
+        <div class="card-body">
+            <ul class="list-group">
+                <li class="list-group-item">
+                    <ul class="list-group">
+                        <h5>Apartado</h5>
+                        <li class="list-group-item"></li>
+                    </ul>
+                </li>
+                
+                <li class="list-group-item">
+                    <div class="accordion" id="extrasAccordion">
+                        <div class="card">
+                            <div class="card-header d-flex justify-content-between align-items-center" id="headingExtras">
+                                <h5 class="mb-0">Extras</h5>
+                                <button class="btn btn-link ml-auto" type="button" data-toggle="collapse" data-target="#collapseExtras" aria-expanded="true" aria-controls="collapseExtras">
+                                    <i class="bi bi-chevron-down"></i>
+                                </button>
+                            </div>
+
+                            <div id="collapseExtras" class="collapse" aria-labelledby="headingExtras" data-parent="#extrasAccordion">
+                                <div class="card-body">
+                                    <ul class="list-group">
+                                        <li class="list-group-item">Permitir crear elementos con JSON y permitir subir la configuración en el JSON además de distintos tipos de elementos eligiendo para cada uno la categoría o el elemento padre dentro de 1 mismo JSON.</li>
+                                        <li class="list-group-item">Implementar sistema de tags.</li>
+                                        <li class="list-group-item">Mantener las últimas opciones usadas, por ejemplo en caché, a la hora de crear elementos. (load preset, erase preset, save preset)</li>
+                                        <li class="list-group-item">Cargar las tablas de datos desde el servidor si tardan demasiado.</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+
     <h1>Project Summary and Roadmap</h1>
     <h2>Project Summary</h2>
-    Tengo una web hecha en laravel, con bootstrap, adminlte y datatables.
-
     <p>The project aims to create a web-based platform that leverages Large Language Models (LLMs) to generate multiple texts based on user-defined templates. Users can create, manage, and visualize various categories and elements, formulate template sentences, and generate permutations of these templates to produce a wide range of text outputs. Additionally, the platform supports the generation of images related to the text outputs, providing a comprehensive tool for creative content generation and management. Core functionalities include user authentication and management, category and element management, template creation and management, prompt generation and LLM integration, image generation and management, visualization and filtering, job scheduling and notification, additional content generation, and robust database management.</p>
     <p>Enhanced functionalities will include advanced search and filtering, analytics and reporting, customizable LLM parameters, content export and import, collaboration and sharing, role-based access control, version control, integration with external tools, content moderation, customizable user interface, user feedback and ratings, AI-powered suggestions, performance optimization, scheduled content generation, and multi-language support. The design and user experience (UX/UI) will focus on creating an intuitive and responsive user interface with a clear navigation structure, ensuring a comprehensive and user-friendly platform for generating, managing, and visualizing creative content using LLMs and image generation APIs.</p>
 
@@ -48,6 +92,7 @@
             <ul>
                 <li><strong>1.0.10:</strong> Automatic generation of prompts based on templates.</li>
                 <li><strong>1.0.11:</strong> Integration with LLM API for generating responses.</li>
+                <li><strong>1.0.10:</strong> Allow to generate multiple llm responses for the same prompt.</li>
                 <li><strong>1.0.12:</strong> Storage of prompts and LLM responses in the database.</li>
             </ul>
         </li>

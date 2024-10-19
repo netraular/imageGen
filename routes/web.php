@@ -27,6 +27,7 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('templates', TemplateController::class);
     Route::resource('prompts', PromptController::class);
     Route::resource('llm_responses', LlmResponseController::class);
+    Route::post('llm_responses/{llmResponse}/regenerate', [LlmResponseController::class, 'regenerate'])->name('llm_responses.regenerate');
     Route::resource('images', ImageController::class);
 
     // Specific routes for generation and execution
