@@ -22,7 +22,9 @@
                 <li class="list-group-item">
                     <ul class="list-group">
                         <h5>Apartado</h5>
-                        <li class="list-group-item"></li>
+                        <li class="list-group-item">Generar template para imagenes. por ejemplo:
+                            <p class="card">Generate a small prompt that describes an image with the style "style" with the focus on the element "element" of the category "category". Make sure to write the text style "style", category "category" and element "element" in the same prompt.</p>
+                        </li>
                     </ul>
                 </li>
                 
@@ -43,6 +45,11 @@
                                         <li class="list-group-item">Implementar sistema de tags.</li>
                                         <li class="list-group-item">Mantener las últimas opciones usadas, por ejemplo en caché, a la hora de crear elementos. (load preset, erase preset, save preset)</li>
                                         <li class="list-group-item">Cargar las tablas de datos desde el servidor si tardan demasiado.</li>
+                                        <li class="list-group-item">Permitir a la hora de ejecutar prompts, elegir que modelo usar según tu llm service.</li>
+                                        <li class="list-group-item">Elegir cuantas generaciones hacer.</li>
+                                        <li class="list-group-item">Permitir eliminar generaciones antiguas con más facilidad, por ejemplo eligiendo fecha de la generación.</li>
+                                        <li class="list-group-item">La generación de imágenes realizarla con opciones en vez de solo un botón desde templates.</li>
+                                        <li class="list-group-item">A la hora de generar templates, mostrar que categorías o datos se pueden usar de forma dinámica.</li>
                                     </ul>
                                 </div>
                             </div>
@@ -81,7 +88,7 @@
                 <li><strong>1.0.6.2:</strong> Allow to sort and filter tables.</li>
             </ul>
         </li>
-        <li ><strong class="bg-info text-dark">Template Creation and Management:</strong>
+        <li ><strong>Template Creation and Management:</strong>
             <ul>
                 <li><strong>1.0.7:</strong> CRUD operations for templates.</li>
                 <li><strong>1.0.8:</strong> Automatic generation of permutations of elements within categories.</li>
@@ -96,7 +103,7 @@
                 <li><strong>1.0.12:</strong> Storage of prompts and LLM responses in the database.</li>
             </ul>
         </li>
-        <li><strong>Image Generation and Management:</strong>
+        <li><strong class="bg-info text-dark">Image Generation and Management:</strong>
             <ul>
                 <li><strong>1.0.13:</strong> Script to generate images for LLM responses.</li>
                 <li><strong>1.0.14:</strong> CRUD operations for images (mark as favorite, delete).</li>

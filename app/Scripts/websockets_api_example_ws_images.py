@@ -12,7 +12,7 @@ import datetime
 import sys
 import os
 
-server_address = "5.9.50.155:8188"
+server_address = 1 #Se pasa por parámetro.
 client_id = str(uuid.uuid4())
 
 def queue_prompt(prompt):
