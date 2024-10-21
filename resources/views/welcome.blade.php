@@ -34,7 +34,13 @@
                             <div class="card-header d-flex justify-content-between align-items-center" id="headingExtras">
                                 <h5 class="mb-0">Extras</h5>
                                 <button class="btn btn-link ml-auto" type="button" data-toggle="collapse" data-target="#collapseExtras" aria-expanded="true" aria-controls="collapseExtras">
-                                    <i class="bi bi-chevron-down"></i>
+                                    <i class="bi bi-chevron-down">·Realizar limpieza de caracteres como \r de los campos elements o categories.</i>
+                                    <i class="bi bi-chevron-down">·Impedir repetir el nombre de una categoría para un mismo usuario.</i>
+                                    <i class="bi bi-chevron-down">·Indicar que solo se pueden usar en un template campos con una variable que sea el nombre de la categoría, por ejemplo {{style}} y campos con nombre de categoría padre punto y nombre de categoría {{category.element}}</i>
+
+                                    
+
+
                                 </button>
                             </div>
 
