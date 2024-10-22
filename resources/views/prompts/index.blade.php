@@ -16,23 +16,6 @@
                         <th class="no-sort">Acciones</th>
                     </tr>
                 </thead>
-                <tbody>
-                    @foreach($prompts as $prompt)
-                    <tr>
-                        <td>{{ $prompt->id }}</td>
-                        <td>{{ $prompt->sentence }}</td>
-                        <td>{{ $prompt->template->sentence }}</td>
-                        <td>
-                            <a href="{{ route('prompts.edit', $prompt->id) }}" class="btn btn-sm btn-warning">Editar</a>
-                            <form action="{{ route('prompts.destroy', $prompt->id) }}" method="POST" style="display:inline;" onsubmit="return confirmDelete();">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="btn btn-sm btn-danger">Eliminar</button>
-                            </form>
-                        </td>
-                    </tr>
-                    @endforeach
-                </tbody>
             </table>
         </div>
     </div>
@@ -48,30 +31,40 @@
         return confirm('¿Estás seguro de que deseas eliminar este prompt?');
     }
 
-    // Generación de la datatable
     document.addEventListener('DOMContentLoaded', function() {
         const table = $('#prompts-table').DataTable({
-            "paging": true,
-            "lengthChange": true,
-            "searching": true,
-            "ordering": true,
-            "info": true,
-            "autoWidth": true,
-            "responsive": true,
-            "language": {
-                "info": "Mostrando _START_ a _END_ de _TOTAL_ registros",
-                "paginate": {
-                    "previous": "&#9664;", 
-                    "next": "&#9654;" 
-                },
-                "lengthMenu": "Mostrar _MENU_",
-            },
-            "columnDefs": [
-                { "orderable": false, "targets": 'no-sort' }
+            processing: true,
+            serverSide: true,
+            ajax: "{{ route('prompts.data') }}", // Necesitarás crear esta ruta
+            columns: [
+                {data: 'id', name: 'id'},
+                {data: 'sentence', name: 'sentence'},
+                {data: 'template_sentence', name: 'template.sentence'},
+                {
+                    data: 'actions', 
+                    name: 'actions', 
+                    orderable: false, 
+                    searchable: false
+                }
             ],
+            "language": {
+                "processing": "Procesando...",
+                "lengthMenu": "Mostrar _MENU_",
+                "zeroRecords": "No se encontraron resultados",
+                "info": "Mostrando _START_ a _END_ de _TOTAL_ registros",
+                "infoEmpty": "Mostrando registros del 0 al 0 de un total de 0 registros",
+                "infoFiltered": "(filtrado de un total de _MAX_ registros)",
+                "search": "Buscar:",
+                "paginate": {
+                    "first": "Primero",
+                    "last": "Último",
+                    "next": "&#9654;",
+                    "previous": "&#9664;"
+                }
+            },
             "dom": '<"row table-container"<"col-sm-6"B><"col-sm-6"f><"col-sm-1">>' +
-                    '<"row table-row-with-margin"<"col-sm-12 px-0"tr>>' +
-                    '<"row"<"col-sm-5"i><"col-sm-2"l><"col-sm-5"p>>',
+                   '<"row table-row-with-margin"<"col-sm-12 px-0"tr>>' +
+                   '<"row"<"col-sm-5"i><"col-sm-2"l><"col-sm-5"p>>',
             buttons: [
                 'copy', 'csv', 'excel', 'pdf', 'print'
             ],
@@ -81,14 +74,14 @@
 @endsection
 
 @section('css')
-    <style>
-        .table-row-with-margin {
-            margin-left: -16px;
-            margin-right: -16px;
-        }
+<style>
+    .table-row-with-margin {
+        margin-left: -16px;
+        margin-right: -16px;
+    }
 
-        .card-body{
-            overflow-x:auto;
-        }
-    </style>
+    .card-body{
+        overflow-x:auto;
+    }
+</style>
 @endsection

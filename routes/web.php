@@ -25,15 +25,15 @@ Route::middleware(['auth'])->group(function () {
     Route::post('elements/bulkDelete', [ElementController::class, 'bulkDelete'])->name('elements.bulkDelete');
     Route::get('/elements/parent-elements/{categoryId}', [ElementController::class, 'getParentElementsByCategory']);
     Route::resource('templates', TemplateController::class);
+    Route::post('templates/generate', [TemplateController::class, 'generatePrompts'])->name('templates.generate');
+    Route::post('templates/executePrompts', [TemplateController::class, 'executePrompts'])->name('templates.executePrompts');
+
+    Route::get('prompts/data', [PromptController::class, 'getPrompts'])->name('prompts.data');
     Route::resource('prompts', PromptController::class);
+    Route::post('prompts/generate', [PromptController::class, 'generateLlmResponses'])->name('prompts.generate');
     Route::resource('llm_responses', LlmResponseController::class);
     Route::post('llm_responses/{llmResponse}/regenerate', [LlmResponseController::class, 'regenerate'])->name('llm_responses.regenerate');
     Route::resource('images', ImageController::class);
-
-    // Specific routes for generation and execution
-    Route::post('templates/generate', [TemplateController::class, 'generatePrompts'])->name('templates.generate');
-    Route::post('prompts/generate', [PromptController::class, 'generateLlmResponses'])->name('prompts.generate');
-    Route::post('templates/executePrompts', [TemplateController::class, 'executePrompts'])->name('templates.executePrompts');
 
     // Profile routes
     Route::get('profile', [ProfileController::class, 'show'])->name('profile.show');
