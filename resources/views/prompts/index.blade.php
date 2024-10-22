@@ -35,7 +35,7 @@
         const table = $('#prompts-table').DataTable({
             processing: true,
             serverSide: true,
-            ajax: "{{ route('prompts.data') }}", // Necesitarás crear esta ruta
+            ajax: "{{ route('prompts.data') }}",
             columns: [
                 {data: 'id', name: 'id'},
                 {data: 'sentence', name: 'sentence'},
@@ -64,7 +64,7 @@
             },
             "dom": '<"row table-container"<"col-sm-6"B><"col-sm-6"f><"col-sm-1">>' +
                    '<"row table-row-with-margin"<"col-sm-12 px-0"tr>>' +
-                   '<"row"<"col-sm-5"i><"col-sm-2"l><"col-sm-5"p>>',
+                   '<"row"<"col-sm-4"i><"col-sm-2"l><"col-sm-6"p>>',
             buttons: [
                 'copy', 'csv', 'excel', 'pdf', 'print'
             ],

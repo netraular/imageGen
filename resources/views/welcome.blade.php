@@ -22,7 +22,7 @@
                 <li class="list-group-item">
                     <ul class="list-group">
                         <h5>Apartado</h5>
-                        <li class="list-group-item">Realizar templates con jobs                        </li>
+                        <li class="list-group-item"></li>
                     </ul>
                 </li>
                 
@@ -50,6 +50,11 @@
                                     <li class="list-group-item">·Impedir repetir el nombre de una categoría para un mismo usuario.</li>
                                     <li class="list-group-item">·Indicar que solo se pueden usar en un template campos con una variable que sea el nombre de la categoría, por ejemplo style y campos con nombre de categoría padre punto y nombre de categoría category.element</li>
                                     <li class="list-group-item">Buscar buenas prompts usando un template con pocos elementos y ir probando.</li>
+                                    <li class="list-group-item">Añadir al menú de templates la opción de eliminar todos los prompts generados para un template.</li>
+                                    <li class="list-group-item">Añadir al menú prompts, la opción de generar llm responses para un prompt concreto en vez de tener que hacer la generación todos los prompts mediante templates.</li>
+                                    <li class="list-group-item">Crea un menú de notificaciones para cuando se ejecutan tareas como jobs que tardan mucho.</li>
+                                    <li class="list-group-item">Crear un menú general desde el que poder ver una estructura de todos los elementos.</li>
+
                                     
                                     </ul>
                                 </div>
