@@ -22,9 +22,7 @@
                 <li class="list-group-item">
                     <ul class="list-group">
                         <h5>Apartado</h5>
-                        <li class="list-group-item">Generar template para imagenes. por ejemplo:
-                            <p class="card">Generate a small prompt that describes an image with the style "style" with the focus on the element "element" of the category "category". Make sure to write the text style "style", category "category" and element "element" in the same prompt.</p>
-                        </li>
+                        <li class="list-group-item">Realizar templates con jobs                        </li>
                     </ul>
                 </li>
                 
@@ -33,17 +31,8 @@
                         <div class="card">
                             <div class="card-header d-flex justify-content-between align-items-center" id="headingExtras">
                                 <h5 class="mb-0">Extras</h5>
-                                <button class="btn btn-link ml-auto" type="button" data-toggle="collapse" data-target="#collapseExtras" aria-expanded="true" aria-controls="collapseExtras">
-                                    <i class="bi bi-chevron-down">·Realizar limpieza de caracteres como \r de los campos elements o categories.</i>
-                                    <i class="bi bi-chevron-down">·Impedir repetir el nombre de una categoría para un mismo usuario.</i>
-                                    <i class="bi bi-chevron-down">·Indicar que solo se pueden usar en un template campos con una variable que sea el nombre de la categoría, por ejemplo {{style}} y campos con nombre de categoría padre punto y nombre de categoría {{category.element}}</i>
-
-                                    
-
-
-                                </button>
+                                <button class="btn btn-link ml-auto" type="button" data-toggle="collapse" data-target="#collapseExtras" aria-expanded="true" aria-controls="collapseExtras"><i class="bi bi-chevron-down"></i></button>
                             </div>
-
                             <div id="collapseExtras" class="collapse" aria-labelledby="headingExtras" data-parent="#extrasAccordion">
                                 <div class="card-body">
                                     <ul class="list-group">
@@ -56,6 +45,12 @@
                                         <li class="list-group-item">Permitir eliminar generaciones antiguas con más facilidad, por ejemplo eligiendo fecha de la generación.</li>
                                         <li class="list-group-item">La generación de imágenes realizarla con opciones en vez de solo un botón desde templates.</li>
                                         <li class="list-group-item">A la hora de generar templates, mostrar que categorías o datos se pueden usar de forma dinámica.</li>
+                                        
+                                    <li class="list-group-item">·Realizar limpieza de caracteres como \r de los campos elements o categories.</li>
+                                    <li class="list-group-item">·Impedir repetir el nombre de una categoría para un mismo usuario.</li>
+                                    <li class="list-group-item">·Indicar que solo se pueden usar en un template campos con una variable que sea el nombre de la categoría, por ejemplo style y campos con nombre de categoría padre punto y nombre de categoría category.element</li>
+                                    <li class="list-group-item">Buscar buenas prompts usando un template con pocos elementos y ir probando.</li>
+                                    
                                     </ul>
                                 </div>
                             </div>

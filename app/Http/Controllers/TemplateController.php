@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\DB;
 use App\Jobs\GenerateLlmResponseJob;
 use App\Models\LlmResponse;
 use App\Models\Category;
-
+use App\Jobs\GeneratePromptsJob;
 class TemplateController extends Controller
 {
     /**
@@ -125,185 +125,60 @@ class TemplateController extends Controller
                 $elementsByCategory[$category] = $mainElements;
             }
         }
-        $combinations = $this->generateCombinations($elementsByCategory);
 
-        $combinationsWithNames = $this->replaceIdsWithNames($combinations, $elementsByCategory, $categoriesIdMap);
+        GeneratePromptsJob::dispatch($templateId, $elementsByCategory, $categoriesIdMap, $sentence);
 
-        
-        // Crear los prompts con las combinaciones generadas
-        $batchSize = 1000; // Define el tamaño del lote
-        $totalCombinations = count($combinationsWithNames);
-        
-        DB::transaction(function () use ($template, $sentence, $combinationsWithNames, $batchSize, $totalCombinations) {
-            for ($i = 0; $i < $totalCombinations; $i += $batchSize) {
-                $batch = array_slice($combinationsWithNames, $i, $batchSize);
-        
-                foreach ($batch as $combination) {
-                    $promptSentence = $sentence;
-                    foreach ($combination as $category => $element) {
-                        $promptSentence = str_replace("{{{$category}}}", $element, $promptSentence);
-                    }
-        
-                    Prompt::create([
-                        'sentence' => $promptSentence,
-                        'template_id' => $template->id,
-                    ]);
-                }
-        
-                // Confirmar el lote actual
-                DB::commit();
-        
-                // Comenzar una nueva transacción para el siguiente lote
-                DB::beginTransaction();
-            }
-        });
-
-    return redirect()->route('templates.index')->with('success', 'Prompts generados exitosamente.');
-}
-protected function replaceIdsWithNames(array $combinations, array $elementsByCategory, array $categoriesIdMap)
-{
-    $combinationsWithNames = [];
-    foreach ($combinations as $combination) {
-        $newCombination = [];
-        foreach ($combination as $category => $elementId) {
-            $categoryParts = explode('.', $category);
-            $mainCategory = $categoryParts[0];
-            $subCategory = isset($categoryParts[1]) ? $categoryParts[1] : null;
-
-            if ($subCategory) {
-                // Si es una subcategoría, buscar en el subarray correspondiente
-                $mainElementId = $elementsByCategory[$category][$combination[$mainCategory]][$elementId];
-                // dd($elementsByCategory);
-                // dd($category);
-                // dd($elementsByCategory[$category]);
-
-                // dd($mainCategory);
-                // dd($combination);
-                // dd($combination[$mainCategory]);
-
-                // dd($elementsByCategory[$category][$combination[$mainCategory]]);
-                // dd($elementId);
-                // dd($elementsByCategory[$category][$combination[$mainCategory]][$elementId]);
-
-                $newCombination[$category] = $mainElementId;
-            } else {
-                // Si es una categoría principal, buscar directamente
-                $newCombination[$category] = $elementsByCategory[$category][$elementId];
-            }
-        }
-        $combinationsWithNames[] = $newCombination;
+        return redirect()->route('templates.index')->with('success', 'Prompts generados exitosamente.');
     }
 
-    // Reemplazar las claves de las combinaciones con los valores de $categoriesIdMap
-    $finalCombinationsWithNames = [];
-    foreach ($combinationsWithNames as $combination) {
-        $newCombination = [];
+    private function replaceCategoriesWithIds(array $categories): array
+    {
+        $categoryIds = [];
+        $userId = auth()->id(); // Obtener el ID del usuario autenticado
+        $idToCategoryMap = [];
 
-        foreach ($combination as $key => $value) {
-            if (isset($categoriesIdMap[$key])) {
-                $newCombination[$categoriesIdMap[$key]] = $value;
-            } else {
-                $newCombination[$key] = $value;
-            }
-        }
+        foreach ($categories as $category) {
+            $parts = explode('.', $category);
+            $ids = [];
 
-        $finalCombinationsWithNames[] = $newCombination;
-    }
-    return $finalCombinationsWithNames;
-}
-private function replaceCategoriesWithIds(array $categories): array
-{
-    $categoryIds = [];
-    $userId = auth()->id(); // Obtener el ID del usuario autenticado
-    $idToCategoryMap = [];
+            foreach ($parts as $part) {
+                // Buscar la categoría con el mismo user_id
+                $categoryModel = Category::where('name', $part)
+                                        ->where('user_id', $userId)
+                                        ->first();
 
-    foreach ($categories as $category) {
-        $parts = explode('.', $category);
-        $ids = [];
-
-        foreach ($parts as $part) {
-            // Buscar la categoría con el mismo user_id
-            $categoryModel = Category::where('name', $part)
-                                     ->where('user_id', $userId)
-                                     ->first();
-
-            if ($categoryModel) {
-                // Almacenar el ID de la categoría
-                $ids[] = $categoryModel->id;
-                // Almacenar el mapeo id -> category
-                $idToCategoryMap[$categoryModel->id] = $part;
-            } else {
-                // Si no se encuentra la categoría, puedes manejarlo como prefieras
-                $ids[] = null;
-            }
-        }
-
-        // Unir los IDs con puntos
-        $categoryIds[$category] = implode('.', $ids);
-    }
-
-    // Reemplazar los nombres por los IDs en el array original
-    $resultIds = array_map(function($category) use ($categoryIds) {
-        return $categoryIds[$category];
-    }, $categories);
-
-    // Crear el diccionario de id -> category
-    $resultMap = [];
-    foreach ($categoryIds as $category => $id) {
-        $resultMap[$id] = $category;
-    }
-
-    return [
-        'ids' => $resultIds,
-        'map' => $resultMap,
-    ];
-}
-protected function generateCombinations(array $elementsByCategory)
-{
-    // Paso 1: Generar combinaciones para las categorías principales (sin puntos)
-    $mainCombinations = [[]];
-    foreach ($elementsByCategory as $category => $elements) {
-        $categoryParts = explode('.', $category);
-        // Si la categoría no tiene punto, es una categoría principal
-        if (count($categoryParts) == 1) {
-            $newCombinations = [];
-            foreach ($mainCombinations as $combination) {
-                foreach ($elements as $elementId => $elementName) {
-                    $newCombination = $combination;
-                    $newCombination[$category] = $elementId;
-                    $newCombinations[] = $newCombination;
+                if ($categoryModel) {
+                    // Almacenar el ID de la categoría
+                    $ids[] = $categoryModel->id;
+                    // Almacenar el mapeo id -> category
+                    $idToCategoryMap[$categoryModel->id] = $part;
+                } else {
+                    // Si no se encuentra la categoría, puedes manejarlo como prefieras
+                    $ids[] = null;
                 }
             }
-            $mainCombinations = $newCombinations;
+
+            // Unir los IDs con puntos
+            $categoryIds[$category] = implode('.', $ids);
         }
-    }
-    // Paso 2: Generar combinaciones para las subcategorías (con puntos)
-    foreach ($elementsByCategory as $category => $elements) {
-        $categoryParts = explode('.', $category);
-        // Si la categoría tiene punto, es una subcategoría
-        if (count($categoryParts) > 1) {
-            $newCombinations = [];
-            //Para cada combinación original sin elementos padres,
-            foreach ($mainCombinations as $combination) {
-                //Miro cada categoría con elemento padre
-                foreach ($elements as $mainElementId => $subElements) {
-                    //Miro cada elemento con elemento padre
-                    foreach ($subElements as $subElementId => $subElementName) {
-                        //Si la categoría padre está en la frase
-                        if($combination[$categoryParts[0]] == $mainElementId){
-                            //Guardo el elemento en una combinación nueva
-                            $newCombination = $combination;
-                            $newCombination[$category] = $subElementId;
-                            $newCombinations[] = $newCombination;
-                        }
-                    }
-                }
-            }
-            $mainCombinations = $newCombinations;
+
+        // Reemplazar los nombres por los IDs en el array original
+        $resultIds = array_map(function($category) use ($categoryIds) {
+            return $categoryIds[$category];
+        }, $categories);
+
+        // Crear el diccionario de id -> category
+        $resultMap = [];
+        foreach ($categoryIds as $category => $id) {
+            $resultMap[$id] = $category;
         }
+
+        return [
+            'ids' => $resultIds,
+            'map' => $resultMap,
+        ];
     }
-    return $mainCombinations;
-}
+
     public function executePrompts(Request $request)
     {
         $templateId = $request->input('template_id');
