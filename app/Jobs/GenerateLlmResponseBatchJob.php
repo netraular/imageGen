@@ -1,5 +1,5 @@
 <?php
-// Al editar este archivo, ejecutar "sudo service supervisor restart"
+
 namespace App\Jobs;
 
 use App\Models\Prompt;
@@ -10,10 +10,11 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Bus\Batchable;
 
-class GenerateLlmResponseJob implements ShouldQueue
+class GenerateLlmResponseBatchJob implements ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels, Batchable;
 
     protected $prompt;
 

@@ -21,8 +21,10 @@
             <ul class="list-group">
                 <li class="list-group-item">
                     <ul class="list-group">
-                        <h5>Apartado</h5>
-                        <li class="list-group-item"></li>
+                        <h5>Por realizar</h5>
+                        <li class="list-group-item">Realizar executePrompts con un job que genere batch jobs para no tener que esperar a que se carguen las 200.000 consultas sin recargar la página.</li>
+                        <li class="list-group-item">Tener en cuenta las respuestas de la api de groc y parar el batch job hasta que se vuelva a poder ejecutar.</li>
+                        <li class="list-group-item">Crear sistema de notificaciones.</li>
                     </ul>
                 </li>
                 

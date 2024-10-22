@@ -11,6 +11,8 @@ use App\Jobs\GenerateLlmResponseJob;
 use App\Models\LlmResponse;
 use App\Models\Category;
 use App\Jobs\GeneratePromptsJob;
+use App\Jobs\ExecutePromptsJob;
+
 class TemplateController extends Controller
 {
     /**
@@ -182,19 +184,11 @@ class TemplateController extends Controller
     public function executePrompts(Request $request)
     {
         $templateId = $request->input('template_id');
-        $prompts = Prompt::where('template_id', $templateId)->get();
-
-        foreach ($prompts as $prompt) {
-            // Crear un registro en la tabla llm_responses con el estado "pending"
-            $llmResponse = LlmResponse::create([
-                'prompt_id' => $prompt->id,
-                'status' => 'pending',
-            ]);
-
-            // Encolar el job
-            GenerateLlmResponseJob::dispatch($prompt);
-        }
-
+        $batchSize = 10000; // Tamaño del lote
+    
+        // Despachar el job para ejecutar los prompts en segundo plano
+        ExecutePromptsJob::dispatch($templateId, $batchSize);
+    
         return redirect()->route('templates.index')->with('success', 'Prompts encolados para ejecución.');
     }
 }
