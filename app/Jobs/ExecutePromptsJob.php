@@ -11,6 +11,8 @@ use App\Models\Prompt;
 use App\Models\LlmResponse;
 use Illuminate\Support\Facades\Bus;
 use App\Jobs\GenerateLlmResponseBatchJob;
+use App\Notifications\JobCompletedNotification;
+use Illuminate\Support\Facades\Auth;
 
 class ExecutePromptsJob implements ShouldQueue
 {
@@ -44,6 +46,11 @@ class ExecutePromptsJob implements ShouldQueue
             // Crear un batch de jobs y despacharlos
             Bus::batch($jobs)
                 ->name('Generate LLM Responses')
+                ->finally(function ($batch) {
+                    // Enviar notificación de job completado
+                    $user = Auth::user();
+                    $user->notify(new JobCompletedNotification('ExecutePromptsJob'));
+                })
                 ->dispatch();
         });
     }

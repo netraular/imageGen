@@ -8,6 +8,7 @@ use App\Http\Controllers\PromptController;
 use App\Http\Controllers\LlmResponseController;
 use App\Http\Controllers\ImageController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\NotificationsController;
 
 // Public routes
 Route::get('/', function () {
@@ -39,4 +40,10 @@ Route::middleware(['auth'])->group(function () {
     Route::get('profile', [ProfileController::class, 'show'])->name('profile.show');
     Route::get('profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::put('profile', [ProfileController::class, 'update'])->name('profile.update');
+
+    //Notificationsuse 
+
+    Route::get('notifications/get', [NotificationsController::class, 'getNotificationsData'])->name('notifications.get');
+    Route::get('notifications/show', [NotificationsController::class, 'showNotifications'])->name('notifications.show');
+    Route::put('notifications/{id}/markAsRead', [NotificationsController::class, 'markAsRead'])->name('notifications.markAsRead');
 });

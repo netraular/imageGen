@@ -5,13 +5,12 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Template;
 use App\Models\Element;
-use App\Models\Prompt;
-use Illuminate\Support\Facades\DB;
-use App\Jobs\GenerateLlmResponseJob;
-use App\Models\LlmResponse;
 use App\Models\Category;
 use App\Jobs\GeneratePromptsJob;
 use App\Jobs\ExecutePromptsJob;
+
+use App\Notifications\JobStartedNotification;
+use Illuminate\Support\Facades\Auth;
 
 class TemplateController extends Controller
 {
@@ -130,6 +129,10 @@ class TemplateController extends Controller
 
         GeneratePromptsJob::dispatch($templateId, $elementsByCategory, $categoriesIdMap, $sentence);
 
+        // Enviar notificación de job iniciado
+        $user = Auth::user();
+        $user->notify(new JobStartedNotification('GeneratePromptsJob'));
+
         return redirect()->route('templates.index')->with('success', 'Prompts generados exitosamente.');
     }
 
@@ -188,6 +191,10 @@ class TemplateController extends Controller
     
         // Despachar el job para ejecutar los prompts en segundo plano
         ExecutePromptsJob::dispatch($templateId, $batchSize);
+
+        // Enviar notificación de job iniciado
+        $user = Auth::user();
+        $user->notify(new JobStartedNotification('ExecutePromptsJob'));
     
         return redirect()->route('templates.index')->with('success', 'Prompts encolados para ejecución.');
     }

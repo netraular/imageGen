@@ -306,6 +306,19 @@ return [
         'topnav_right' => true,
         'can'=> 'not-logged-in',
     ],
+    [
+        'type' => 'navbar-notification',
+        'id' => 'my-notification',
+        'icon' => 'fas fa-bell',
+        'url' => 'notifications/show',
+        'topnav_right' => true,
+        'dropdown_mode' => true,
+        'dropdown_flabel' => 'All notifications',
+        'update_cfg' => [
+            'url' => 'notifications/get',
+            'period' => 30,
+        ],
+    ],
 
     // Sidebar items:
     [
