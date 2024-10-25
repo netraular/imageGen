@@ -42,8 +42,8 @@ Route::middleware(['auth'])->group(function () {
     Route::put('profile', [ProfileController::class, 'update'])->name('profile.update');
 
     //Notificationsuse 
-
     Route::get('notifications/get', [NotificationsController::class, 'getNotificationsData'])->name('notifications.get');
     Route::get('notifications/show', [NotificationsController::class, 'showNotifications'])->name('notifications.show');
     Route::put('notifications/{id}/markAsRead', [NotificationsController::class, 'markAsRead'])->name('notifications.markAsRead');
+    Route::post('notifications/markAllAsRead', [NotificationsController::class, 'markAllAsRead'])->name('notifications.markAllAsRead');
 });

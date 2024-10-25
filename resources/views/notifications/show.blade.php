@@ -1,4 +1,4 @@
-@extends('adminlte::page')
+@extends( 'layouts.app')
 
 @section('title', 'Notifications')
 
@@ -9,6 +9,10 @@
 @section('content')
     <div class="card">
         <div class="card-body">
+            <form action="{{ route('notifications.markAllAsRead') }}" method="POST" style="margin-top: 10px;">
+                @csrf
+                <button type="submit" class="btn btn-primary">Mark All as Read</button>
+            </form>
             <ul class="list-group">
                 @foreach($notifications as $notification)
                     <li class="list-group-item d-flex justify-content-between align-items-center">

@@ -70,9 +70,6 @@
 
 @push('css')
 @vite(['resources/sass/app.scss'])
-<!-- Select2 dropdown with search -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" />
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.min.css" />
 <style>
 /* Hace que el sidebar ocupe todo el alto de la ventana */
 .main-sidebar {
@@ -112,6 +109,14 @@
 .dataTables_length {
     margin-top: 2px;
     margin-left:-20px;
+}
+/* Estilos específicos para el badge */
+.navbar-badge {
+    position: absolute;
+    top: 0;
+    right: 0;
+    font-size: 0.6rem;
+    padding: 0.2rem 0.2rem;
 }
 </style>
 @endpush
