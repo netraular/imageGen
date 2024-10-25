@@ -63,12 +63,11 @@ return [
     |
     */
 
-    'logo' => 'PromptPalette',
-    'logo_img' => 'favicon.png',
-    'logo_img_class' => 'w-25',
+    'logo' => '<b>PromptPalette</b>',
+    'logo_img' => './favicon.png',
     'logo_img_xl' => null,
     'logo_img_xl_class' => 'brand-image-xl',
-    'logo_img_alt' => 'Logo',
+    'logo_img_alt' => 'PromptPalette Logo',
 
     /*
     |--------------------------------------------------------------------------
