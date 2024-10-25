@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\LlmResponse;
 use App\Models\Prompt;
 use App\Jobs\GenerateLlmResponseJob;
+use Yajra\DataTables\Facades\DataTables;
 
 class LlmResponseController extends Controller
 {
@@ -98,4 +99,32 @@ class LlmResponseController extends Controller
 
     return redirect()->route('llm_responses.index')->with('success', 'LLM Response regenerated successfully.');
 }
+
+    /**
+     * Process datatables ajax request.
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function getLlmResponses(Request $request)
+    {
+        $llmResponses = LlmResponse::with('prompt'); // Eager loading para evitar N+1
+
+        return DataTables::of($llmResponses)
+            ->addIndexColumn()
+            ->addColumn('prompt_sentence', function($llmResponse) {
+                return $llmResponse->prompt->sentence;
+            })
+            ->addColumn('actions', function($llmResponse) {
+                return '<a href="'.route('llm_responses.edit', $llmResponse->id).'" class="btn btn-sm btn-warning">Editar</a> '.
+                    '<form action="'.route('llm_responses.destroy', $llmResponse->id).'" method="POST" style="display:inline;" onsubmit="return confirmDelete();">'.
+                    csrf_field().
+                    method_field('DELETE').
+                    '<button type="submit" class="btn btn-sm btn-danger">Eliminar</button></form> '.
+                    '<form action="'.route('llm_responses.regenerate', $llmResponse->id).'" method="POST" style="display:inline;">'.
+                    csrf_field().
+                    '<button type="submit" class="btn btn-sm btn-primary">Regenerar</button></form>';
+            })
+            ->rawColumns(['actions'])
+            ->make(true);
+    }
 }

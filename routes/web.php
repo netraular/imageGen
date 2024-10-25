@@ -22,6 +22,7 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 // Protected routes (require authentication)
 Route::middleware(['auth'])->group(function () {
     Route::resource('categories', CategoryController::class);
+    Route::get('/elements/getElements', [ElementController::class, 'getElements'])->name('elements.getElements');
     Route::resource('elements', ElementController::class);
     Route::post('elements/bulkDelete', [ElementController::class, 'bulkDelete'])->name('elements.bulkDelete');
     Route::get('/elements/parent-elements/{categoryId}', [ElementController::class, 'getParentElementsByCategory']);
@@ -32,6 +33,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('prompts/data', [PromptController::class, 'getPrompts'])->name('prompts.data');
     Route::resource('prompts', PromptController::class);
     Route::post('prompts/generate', [PromptController::class, 'generateLlmResponses'])->name('prompts.generate');
+    Route::get('/llm_responses/data', [LlmResponseController::class, 'getLlmResponses'])->name('llm_responses.data');
     Route::resource('llm_responses', LlmResponseController::class);
     Route::post('llm_responses/{llmResponse}/regenerate', [LlmResponseController::class, 'regenerate'])->name('llm_responses.regenerate');
     Route::resource('images', ImageController::class);

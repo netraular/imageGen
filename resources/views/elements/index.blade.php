@@ -37,7 +37,6 @@
         </div>
     </div>
 
-
     <!-- Tabla de Elementos -->
     <div class="card">
         <div class="card-body">
@@ -51,24 +50,6 @@
                         <th class="no-sort">Acciones</th>
                     </tr>
                 </thead>
-                <tbody>
-                    @foreach($elements as $element)
-                    <tr>
-                        <td><input type="checkbox" class="element-checkbox" data-id="{{ $element->id }}"></td>
-                        <td>{{ $element->id }}</td>
-                        <td>{{ $element->name }}</td>
-                        <td>{{ $element->category->name }}</td>
-                        <td>
-                            <a href="{{ route('elements.edit', $element->id) }}" class="btn btn-sm btn-warning">Editar</a>
-                            <form action="{{ route('elements.destroy', $element->id) }}" method="POST" style="display:inline;" onsubmit="return confirmDelete(event)">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="btn btn-sm btn-danger">Eliminar</button>
-                            </form>
-                        </td>
-                    </tr>
-                    @endforeach
-                </tbody>
             </table>
         </div>
     </div>
@@ -153,30 +134,40 @@
     //Generación de la datatable
     document.addEventListener('DOMContentLoaded', function() {
         const table = $('#elements-table').DataTable({
-            "paging": true,
-            "lengthChange": true,
-            "searching": true,
-            "ordering": true,
-            "info": true,
-            "autoWidth": false,
-            "responsive": true,
-            "language": {
-                "info": "Mostrando _START_ a _END_ de _TOTAL_ registros",
-                "paginate": {
-                    "previous": "&#9664;", 
-                    "next": "&#9654;" 
-                },
-                "lengthMenu": "Mostrar _MENU_",
-            },
-            "columnDefs": [
-                { "orderable": false, "targets": 'no-sort' }
+            processing: true,
+            serverSide: true,
+            ajax: "{{ route('elements.getElements') }}",
+            columns: [
+                {data: null, orderable: false, searchable: false, render: function(data, type, row) {
+                    return '<input type="checkbox" class="element-checkbox" data-id="' + row.id + '">';
+                }},
+                {data: 'id', name: 'elements.id'},
+                {data: 'name', name: 'elements.name'},
+                {data: 'category_name', name: 'category_name'}, // Usar el alias que especificamos en el controlador
+                {data: 'actions', name: 'actions', orderable: false, searchable: false}
             ],
-            "order": [[1, "asc"]],
-            "dom": '<"row table-container"<"col-sm-6"B><"col-sm-6"f><"col-sm-1">>' +
-                    '<"row table-row-with-margin"<"col-sm-12 px-0"tr>>' +
-                    '<"row"<"col-sm-5"i><"col-sm-2"l><"col-sm-5"p>>',
 
-            buttons: ['copy', 'csv', 'excel', 'pdf', 'print'],
+            "language": {
+                "processing": "Procesando...",
+                "lengthMenu": "Mostrar _MENU_",
+                "zeroRecords": "No se encontraron resultados",
+                "info": "Mostrando _START_ a _END_ de _TOTAL_ registros",
+                "infoEmpty": "Mostrando registros del 0 al 0 de un total de 0 registros",
+                "infoFiltered": "(filtrado de un total de _MAX_ registros)",
+                "search": "Buscar:",
+                "paginate": {
+                    "first": "Primero",
+                    "last": "Último",
+                    "next": "&#9654;",
+                    "previous": "&#9664;"
+                }
+            },
+            "dom": '<"row table-container"<"col-sm-6"B><"col-sm-6"f><"col-sm-1">>' +
+                   '<"row table-row-with-margin"<"col-sm-12 px-0"tr>>' +
+                   '<"row"<"col-sm-4"i><"col-sm-2"l><"col-sm-6"p>>',
+            buttons: [
+                'copy', 'csv', 'excel', 'pdf', 'print'
+            ],
         });
         
         // Filtros
@@ -223,7 +214,6 @@
             }
         }
 
-
         // Función para aplicar los filtros a la tabla
         function applyFilters() {
             const filterId = document.getElementById('filter-id').value;
@@ -262,9 +252,9 @@
 
         // Cerrar el panel de filtros
         document.getElementById('close-filters-btn').addEventListener('click', function() {
-        filtersSection.style.display = 'none';
+            filtersSection.style.display = 'none';
+        });
     });
-});
 </script>
 <script>
     function confirmDelete(event) {

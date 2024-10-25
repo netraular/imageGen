@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Element;
 use App\Models\Category;
 use Illuminate\Support\Facades\Auth;
+use Yajra\DataTables\Facades\DataTables;
 
 class ElementController extends Controller
 {
@@ -23,6 +24,41 @@ class ElementController extends Controller
     
         return view('elements.index', compact('elements', 'categories'));
     }
+
+    /**
+     * Process datatables ajax request.
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function getElements(Request $request)
+    {
+        $user = Auth::user();
+        $elements = Element::with('category')
+            ->join('categories', 'elements.category_id', '=', 'categories.id')
+            ->where('categories.user_id', $user->id)
+            ->select('elements.*', 'categories.name as category_name') // Seleccionar columnas de ambas tablas
+            ->orderBy('elements.id', 'desc');
+    
+        return DataTables::of($elements)
+            ->addIndexColumn()
+            ->addColumn('category_name', function($element) {
+                return $element->category_name;
+            })
+            ->addColumn('actions', function($element) {
+                return '<a href="'.route('elements.edit', $element->id).'" class="btn btn-sm btn-warning">Editar</a> '.
+                       '<form action="'.route('elements.destroy', $element->id).'" method="POST" style="display:inline;" onsubmit="return confirmDelete();">'.
+                       csrf_field().
+                       method_field('DELETE').
+                       '<button type="submit" class="btn btn-sm btn-danger">Eliminar</button></form>';
+            })
+            ->filterColumn('category_name', function($query, $keyword) {
+                $query->where('categories.name', 'like', '%' . $keyword . '%');
+            })
+            ->rawColumns(['actions'])
+            ->make(true);
+    }
+    
+
 
     /**
      * Show the form for creating a new resource.
