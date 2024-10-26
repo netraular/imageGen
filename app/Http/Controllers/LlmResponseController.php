@@ -5,8 +5,9 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\LlmResponse;
 use App\Models\Prompt;
-use App\Jobs\GenerateLlmResponseJob;
+use App\Jobs\GenerateLlmResponseBatchJob;
 use Yajra\DataTables\Facades\DataTables;
+use Illuminate\Support\Facades\Log;
 
 class LlmResponseController extends Controller
 {
@@ -88,17 +89,20 @@ class LlmResponseController extends Controller
     }
 
     public function regenerate(LlmResponse $llmResponse)
-{
-    // Actualizar el estado a "pending"
-    $llmResponse->update([
-        'status' => 'pending',
-    ]);
+    {
+        // Log cuando se inicia la regeneración
+        Log::channel('llmApi')->info('Regeneración iniciada para LLM Response ID: ' . $llmResponse->id);
 
-    // Encolar el job
-    GenerateLlmResponseJob::dispatch($llmResponse->prompt);
+        // Actualizar el estado a "pending"
+        $llmResponse->update([
+            'status' => 'pending',
+        ]);
 
-    return redirect()->route('llm_responses.index')->with('success', 'LLM Response regenerated successfully.');
-}
+        // Encolar el job
+        GenerateLlmResponseBatchJob::dispatch($llmResponse->prompt);
+
+        return redirect()->route('llm_responses.index')->with('success', 'LLM Response regenerated successfully.');
+    }
 
     /**
      * Process datatables ajax request.

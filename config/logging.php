@@ -126,6 +126,12 @@ return [
         'emergency' => [
             'path' => storage_path('logs/laravel.log'),
         ],
+        'llmApi' => [
+            'driver' => 'daily',
+            'path' => storage_path('logs/llmApi.log'),
+            'level' => 'debug',
+            'days' => 7, // Mantén los últimos 7 días de logs
+        ],
 
     ],
 
