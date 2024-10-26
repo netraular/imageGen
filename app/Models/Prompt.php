@@ -20,4 +20,8 @@ class Prompt extends Model
     {
         return $this->hasMany(LlmResponse::class);
     }
+    public static function deletePromptsByTemplateId($templateId)
+    {
+        self::where('template_id', $templateId)->delete();
+    }
 }

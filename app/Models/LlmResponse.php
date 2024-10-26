@@ -11,6 +11,7 @@ class LlmResponse extends Model
         'response',
         'source',
         'status',
+        'execution_id', // Agregar execution_id a la propiedad $fillable
     ];
 
     public function prompt()

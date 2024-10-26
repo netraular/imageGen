@@ -32,20 +32,31 @@ class ExecutePromptsJob implements ShouldQueue
 
     public function handle()
     {
-        Log::channel('llmApi')->info('Iniciando ejecución de prompts para Template ID: ' . $this->templateId);
+
+        // Obtener el último execution_id para este template
+        $lastExecutionId = LlmResponse::whereHas('prompt', function ($query) {
+            $query->where('template_id', $this->templateId);
+        })->max('execution_id') ?? 0;
+
+        $executionId = $lastExecutionId + 1;
+        
+        Log::channel('llmApi')->info('Iniciando ejecución de prompts para Template ID: ' . $this->templateId. ' con Execution ID: ' . $executionId);
+
         // Obtener los prompts en lotes
-        Prompt::where('template_id', $this->templateId)->chunk($this->batchSize, function ($prompts) {
+        Prompt::where('template_id', $this->templateId)->chunk($this->batchSize, function ($prompts) use ($executionId) {
             $jobs = [];
             foreach ($prompts as $prompt) {
+
                 // Crear un registro en la tabla llm_responses con el estado "pending"
                 $llmResponse = LlmResponse::create([
                     'prompt_id' => $prompt->id,
+                    'execution_id' => $executionId,
                     'status' => 'pending',
                 ]);
 
                 // Añadir el job a la lista de jobs
-                $jobs[] = new GenerateLlmResponseBatchJob($prompt);
-                Log::channel('llmApi')->info('Nuevo registro en llm_responses creado para Prompt ID: ' . $prompt->id);
+                $jobs[] = new GenerateLlmResponseBatchJob($llmResponse);
+                Log::channel('llmApi')->info('Nuevo registro en llm_responses creado para Prompt ID: ' . $prompt->id . ' con Execution ID: ' . $executionId);
             }
 
             // Crear un batch de jobs y despacharlos
@@ -57,7 +68,7 @@ class ExecutePromptsJob implements ShouldQueue
 
                 //     // Enviar notificación de job completado
                 //     $user->notify(new JobCompletedNotification('ExecutePromptsJob'));
-                //     Log::channel('llmApi')->info('Batch de jobs completado para Template ID: ' . $this->templateId);
+                // Log::channel('llmApi')->info('Batch de jobs completado para Template ID: ' . $this->templateId . ' con Execution ID: ' . $executionId);
                 // })
                 ->dispatch();
         });

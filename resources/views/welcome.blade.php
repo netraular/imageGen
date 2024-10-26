@@ -24,6 +24,14 @@
                         <h5>Por realizar</h5>
                         <li class="list-group-item">Tener en cuenta las respuestas de la api de groc y parar el batch job hasta que se vuelva a poder ejecutar.</li>
                         <li class="list-group-item">Tener un supervisor de colas o un worker para que funcionen los jobs solos</li>
+                        <li class="list-group-item">
+                        Hacer también que funcione ->finally(function ($batch) en ExecutePromptsJob.php
+                        Mejorar logs por todos lados xd y notificaciones.
+
+                        Mejorar el tiempo de espera, reintentos y esas cosas en llm api de groq.
+                        Y probar con una ejecución completa y con una con muchos datos.
+                        </li>
+
                     </ul>
                 </li>
                 

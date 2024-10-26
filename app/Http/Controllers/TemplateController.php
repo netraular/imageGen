@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Prompt;
 use App\Models\Template;
 use App\Models\Element;
 use App\Models\Category;
@@ -42,8 +43,6 @@ class TemplateController extends Controller
         ]);
 
         $template = Template::create($request->all());
-
-        // Llamar a la función para generar prompts
 
         return redirect()->route('templates.index')->with('success', 'Template created successfully.');
     }
@@ -127,6 +126,9 @@ class TemplateController extends Controller
                 $elementsByCategory[$category] = $mainElements;
             }
         }
+
+        // Eliminar los prompts existentes relacionados con el template
+        Prompt::deletePromptsByTemplateId($templateId);
 
         GeneratePromptsJob::dispatch($templateId, $elementsByCategory, $categoriesIdMap, $sentence);
 
