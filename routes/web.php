@@ -32,7 +32,6 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('prompts/data', [PromptController::class, 'getPrompts'])->name('prompts.data');
     Route::resource('prompts', PromptController::class);
-    Route::post('prompts/generate', [PromptController::class, 'generateLlmResponses'])->name('prompts.generate');
     Route::get('/llm_responses/data', [LlmResponseController::class, 'getLlmResponses'])->name('llm_responses.data');
     Route::resource('llm_responses', LlmResponseController::class);
     Route::post('llm_responses/{llmResponse}/regenerate', [LlmResponseController::class, 'regenerate'])->name('llm_responses.regenerate');
