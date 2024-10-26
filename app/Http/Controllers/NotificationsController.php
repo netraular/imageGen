@@ -104,13 +104,13 @@ class NotificationsController extends Controller
      * Mark all notifications as read.
      *
      * @param Request $request
-     * @return \Illuminate\Http\JsonResponse
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function markAllAsRead(Request $request)
     {
         $user = Auth::user();
         $user->unreadNotifications->markAsRead();
 
-        return response()->json(['success' => true]);
+        return redirect()->back()->with('success', 'Notification marked as read.');
     }
 }

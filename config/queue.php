@@ -34,6 +34,7 @@ return [
             'driver' => 'sync',
         ],
 
+        //Usada para las notificaciones
         'database' => [
             'driver' => 'database',
             'connection' => env('DB_QUEUE_CONNECTION'),
@@ -42,7 +43,12 @@ return [
             'retry_after' => (int) env('DB_QUEUE_RETRY_AFTER', 90),
             'after_commit' => false,
         ],
-
+        'llmApi' => [
+            'driver' => 'database',
+            'table' => 'jobs',
+            'queue' => 'llmApi',
+            'retry_after' => 60,
+        ],
         'beanstalkd' => [
             'driver' => 'beanstalkd',
             'host' => env('BEANSTALKD_QUEUE_HOST', 'localhost'),

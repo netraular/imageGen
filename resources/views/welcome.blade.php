@@ -25,13 +25,9 @@
                         <li class="list-group-item">Tener en cuenta las respuestas de la api de groc y parar el batch job hasta que se vuelva a poder ejecutar.</li>
                         <li class="list-group-item">Tener un supervisor de colas o un worker para que funcionen los jobs solos</li>
                         <li class="list-group-item">
-                        Hacer también que funcione ->finally(function ($batch) en ExecutePromptsJob.php
-                        Mejorar logs por todos lados xd y notificaciones.
-
                         Mejorar el tiempo de espera, reintentos y esas cosas en llm api de groq.
                         Y probar con una ejecución completa y con una con muchos datos.
                         </li>
-
                     </ul>
                 </li>
                 
@@ -54,17 +50,16 @@
                                         <li class="list-group-item">Permitir eliminar generaciones antiguas con más facilidad, por ejemplo eligiendo fecha de la generación.</li>
                                         <li class="list-group-item">La generación de imágenes realizarla con opciones en vez de solo un botón desde templates.</li>
                                         <li class="list-group-item">A la hora de generar templates, mostrar que categorías o datos se pueden usar de forma dinámica.</li>
-                                        
-                                    <li class="list-group-item">·Realizar limpieza de caracteres como \r de los campos elements o categories.</li>
-                                    <li class="list-group-item">·Impedir repetir el nombre de una categoría para un mismo usuario.</li>
-                                    <li class="list-group-item">·Indicar que solo se pueden usar en un template campos con una variable que sea el nombre de la categoría, por ejemplo style y campos con nombre de categoría padre punto y nombre de categoría category.element</li>
-                                    <li class="list-group-item">Buscar buenas prompts usando un template con pocos elementos y ir probando.</li>
-                                    <li class="list-group-item">Añadir al menú de templates la opción de eliminar todos los prompts generados para un template.</li>
-                                    <li class="list-group-item">Añadir al menú prompts, la opción de generar llm responses para un prompt concreto en vez de tener que hacer la generación todos los prompts mediante templates.</li>
-                                    <li class="list-group-item">Crea un menú de notificaciones para cuando se ejecutan tareas como jobs que tardan mucho.</li>
-                                    <li class="list-group-item">Crear un menú general desde el que poder ver una estructura de todos los elementos.</li>
-
-                                    
+                                        <li class="list-group-item">·Realizar limpieza de caracteres como \r de los campos elements o categories.</li>
+                                        <li class="list-group-item">·Impedir repetir el nombre de una categoría para un mismo usuario.</li>
+                                        <li class="list-group-item">·Indicar que solo se pueden usar en un template campos con una variable que sea el nombre de la categoría, por ejemplo style y campos con nombre de categoría padre punto y nombre de categoría category.element</li>
+                                        <li class="list-group-item">Buscar buenas prompts usando un template con pocos elementos y ir probando.</li>
+                                        <li class="list-group-item">Añadir al menú de templates la opción de eliminar todos los prompts generados para un template.</li>
+                                        <li class="list-group-item">Añadir al menú prompts, la opción de generar llm responses para un prompt concreto en vez de tener que hacer la generación todos los prompts mediante templates.</li>
+                                        <li class="list-group-item">Crea un menú de notificaciones para cuando se ejecutan tareas como jobs que tardan mucho.</li>
+                                        <li class="list-group-item">Crear un menú general desde el que poder ver una estructura de todos los elementos.</li>
+                                        <li class="list-group-item">Hacer también que funcione ->finally(function ($batch) en ExecutePromptsJob.php</li>
+                                        <li class="list-group-item">Mejorar logs de jobs y notificaciones.</li>
                                     </ul>
                                 </div>
                             </div>

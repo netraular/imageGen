@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+
 use App\Models\Prompt;
 use App\Models\Template;
+use App\Models\LlmResponse;
 use App\Models\Element;
 use App\Models\Category;
 use App\Jobs\GeneratePromptsJob;
@@ -192,19 +194,26 @@ class TemplateController extends Controller
         $templateId = $request->input('template_id');
         $batchSize = 10000; // Tamaño del lote
     
+        // Generar un nuevo execution_id
+        $lastExecutionId = LlmResponse::whereHas('prompt', function ($query) use ($templateId) {
+            $query->where('template_id', $templateId);
+        })->max('execution_id') ?? 0;
+    
+        $executionId = $lastExecutionId + 1;
+    
         // Log cuando se inicia el proceso de encolado
-        Log::channel('llmApi')->info('Iniciando encolado de prompts para Template ID: ' . $templateId);
+        Log::channel('llmApi')->info('Iniciando encolado de prompts para Template ID: ' . $templateId . ' con Execution ID: ' . $executionId);
     
         // Despachar el job para ejecutar los prompts en segundo plano
         $user = Auth::user();
-        ExecutePromptsJob::dispatch($templateId, $batchSize, $user->id);
-        Log::channel('llmApi')->info('Job encolado para Template ID: ' . $templateId);
+        ExecutePromptsJob::dispatch($templateId, $batchSize, $user->id, $executionId);
+        Log::channel('llmApi')->info('Job encolado para Template ID: ' . $templateId . ' con Execution ID: ' . $executionId);
     
         // Enviar notificación de job iniciado
         $user->notify(new JobStartedNotification('ExecutePromptsJob'));
     
         // Log cuando se encola el job
-        Log::channel('llmApi')->info('Job encolado para Template ID: ' . $templateId);
+        Log::channel('llmApi')->info('Job encolado para Template ID: ' . $templateId . ' con Execution ID: ' . $executionId);
     
         return redirect()->route('templates.index')->with('success', 'Prompts encolados para ejecución.');
     }
