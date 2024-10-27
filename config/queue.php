@@ -43,11 +43,17 @@ return [
             'retry_after' => (int) env('DB_QUEUE_RETRY_AFTER', 90),
             'after_commit' => false,
         ],
-        'llmApi' => [
+        'llmApiMain' => [
             'driver' => 'database',
             'table' => 'jobs',
-            'queue' => 'llmApi',
-            'retry_after' => 60,
+            'queue' => 'llmApiMain',
+            'retry_after' => 300, 
+        ],
+        'llmApiChunk' => [
+            'driver' => 'database',
+            'table' => 'jobs',
+            'queue' => 'llmApiChunk',
+            'retry_after' => 240, // 240 segundos para reintentos de la API
         ],
         'beanstalkd' => [
             'driver' => 'beanstalkd',

@@ -62,6 +62,7 @@ class TemplateController extends Controller
      */
     public function edit(Template $template)
     {
+        
         return view('templates.edit', compact('template'));
     }
 
@@ -192,7 +193,7 @@ class TemplateController extends Controller
     public function executePrompts(Request $request)
     {
         $templateId = $request->input('template_id');
-        $batchSize = 10000; // Tamaño del lote
+        $batchSize = 30; // Tamaño del lote
     
         // Generar un nuevo execution_id
         $lastExecutionId = LlmResponse::whereHas('prompt', function ($query) use ($templateId) {
@@ -206,13 +207,10 @@ class TemplateController extends Controller
     
         // Despachar el job para ejecutar los prompts en segundo plano
         $user = Auth::user();
-        ExecutePromptsJob::dispatch($templateId, $batchSize, $user->id, $executionId);
-        Log::channel('llmApi')->info('Job encolado para Template ID: ' . $templateId . ' con Execution ID: ' . $executionId);
+        ExecutePromptsJob::dispatch($templateId, $batchSize, $user->id, $executionId)->onQueue('llmApiMain');
     
-        // Enviar notificación de job iniciado
+        // Notificación y log
         $user->notify(new JobStartedNotification('ExecutePromptsJob'));
-    
-        // Log cuando se encola el job
         Log::channel('llmApi')->info('Job encolado para Template ID: ' . $templateId . ' con Execution ID: ' . $executionId);
     
         return redirect()->route('templates.index')->with('success', 'Prompts encolados para ejecución.');

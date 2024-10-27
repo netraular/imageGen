@@ -30,6 +30,16 @@ class GenerateLlmResponseBatchJob implements ShouldQueue
 
     public function handle()
     {
+
+
+
+
+// POR AHORA NO SE ESTÁ USANDO. SE ESTÁ INTENTANDO HACER SOLO CON:
+// app/Jobs/ExecutePromptsJob.php
+// app/Jobs/ExecutePromptsChunkJob.php
+
+
+
         // Obtener el registro de control del servicio de Groq API
         $serviceControl = ThirdPartyService::where('service_name', 'groq_api')->first();
 

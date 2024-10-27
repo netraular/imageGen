@@ -33,13 +33,13 @@ class ThirdPartyService extends Model
      * Pausa el servicio por un tiempo específico.
      *
      * @param string $reason
-     * @param int $minutes
+     * @param int $seconds
      */
-    public function pause($reason, $minutes = 0)
+    public function pause($reason, $seconds = 0)
     {
         $this->update([
             'is_paused' => true,
-            'resume_at' => $minutes > 0 ? now()->addMinutes($minutes) : null,
+            'resume_at' => $seconds > 0 ? now()->addSeconds($seconds) : null,
             'pause_reason' => $reason,
         ]);
     }
