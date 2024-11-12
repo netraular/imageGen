@@ -31,6 +31,13 @@
                         <li class="list-group-item">
                         Hacer que 1o se generen todas las llm_responses. Luego se podrá ejecutar ExecutePromptsJob.php generando todas las consultas a la api con jobs individuales. Y por último ejecutar las consultas una tras otra y si falla esperar 60 segundos.
                         </li>
+                        </li>
+                        <li class="list-group-item">
+                            Revisar la respuesta de una consulta api. Obtener los tokens y guardarlos para controlar las consultas api. Tener un controlador de las consultas api por usuario/api key. Con ajustes de tokens y consultas por minuto, hora, dia...
+                        </li>
+                        <li class="list-group-item">
+                            Modificar el job para que solo se haga 1 job por generación o se limite a menos jobs (para no tener 1 por cada llm api call). Y realizarlos con wait o esperando.
+                        </li>
                     </ul>
                 </li>
                 

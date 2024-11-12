@@ -108,7 +108,7 @@ class ExecutePromptsChunkJob implements ShouldQueue
     
         } catch (\GuzzleHttp\Exception\ClientException $e) {
             if ($e->getCode() === 429) {
-                $retryAfter = 61; // Esperar 61 segundos en caso de error 429
+                $retryAfter = 91; // Esperar 61 segundos en caso de error 429
                 $serviceControl = ThirdPartyService::where('service_name', 'groq_api')->first();
                 if ($serviceControl) {
                     $serviceControl->pause('Rate limit exceeded', $retryAfter);
@@ -129,7 +129,7 @@ class ExecutePromptsChunkJob implements ShouldQueue
             if ($this->attempts() > 3) {
                 $this->fail($e); // Falla el job si ya ha habido más de tres intentos
             } else {
-                $this->release(61); // Espera 60 segundos antes de reintentar en caso de error
+                $this->release(91); // Espera 60 segundos antes de reintentar en caso de error
             }
         }
     }

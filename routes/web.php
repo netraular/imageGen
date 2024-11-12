@@ -9,6 +9,7 @@ use App\Http\Controllers\LlmResponseController;
 use App\Http\Controllers\ImageController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\NotificationsController;
+use App\Http\Controllers\TestController;
 
 // Public routes
 Route::get('/', function () {
@@ -50,4 +51,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('notifications/show', [NotificationsController::class, 'showNotifications'])->name('notifications.show');
     Route::put('notifications/{id}/markAsRead', [NotificationsController::class, 'markAsRead'])->name('notifications.markAsRead');
     Route::post('notifications/markAllAsRead', [NotificationsController::class, 'markAllAsRead'])->name('notifications.markAllAsRead');
+
+    //Test
+    Route::get('/test', [TestController::class, 'index'])->name('test.index');
+    Route::get('/test/api', [TestController::class, 'testApi'])->name('test.api');
 });
