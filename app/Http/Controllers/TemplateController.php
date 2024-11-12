@@ -24,7 +24,7 @@ class TemplateController extends Controller
      */
     public function index()
     {
-        $templates = Template::all();
+        $templates = Template::withCount('prompts')->get();
         return view('templates.index', compact('templates'));
     }
 
@@ -55,9 +55,8 @@ class TemplateController extends Controller
      */
     public function show(Template $template)
     {
-        // Extraer valores entre doble corchete del template
+        $template->loadCount('prompts');
         $extractedValues = $this->extractValuesBetweenBrackets($template->sentence);
-    
         return view('templates.show', compact('template', 'extractedValues'));
     }
     private function extractValuesBetweenBrackets($templateSentence)

@@ -35,11 +35,15 @@
                                 @method('DELETE')
                                 <button type="submit" class="btn btn-sm btn-danger">Eliminar</button>
                             </form>
-                            <form action="{{ route('templates.generate') }}" method="POST" style="display:inline;">
-                                @csrf
-                                <input type="hidden" name="template_id" value="{{ $template->id }}">
-                                <button type="submit" class="btn btn-sm btn-success">Generar Prompts</button>
-                            </form>
+                            
+                            @if($template->prompts_count == 0)
+                                <form action="{{ route('templates.generate') }}" method="POST" style="display:inline;">
+                                    @csrf
+                                    <input type="hidden" name="template_id" value="{{ $template->id }}">
+                                    <button type="submit" class="btn btn-sm btn-success">Generar Prompts</button>
+                                </form>
+                            @endif
+
                             <form action="{{ route('templates.executePrompts') }}" method="POST" style="display:inline;">
                                 @csrf
                                 <input type="hidden" name="template_id" value="{{ $template->id }}">
