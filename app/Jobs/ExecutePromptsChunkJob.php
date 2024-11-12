@@ -71,7 +71,7 @@ class ExecutePromptsChunkJob implements ShouldQueue
                     'content' => $llmResponse->prompt->sentence,
                 ],
             ],
-            'model' => 'llama-3.1-70b-versatile',
+            'model' => 'llama3-70b-8192',
         ];
 
         try {

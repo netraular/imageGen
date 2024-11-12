@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Log;
 
 use App\Notifications\JobStartedNotification;
 use Illuminate\Support\Facades\Auth;
+use Yajra\DataTables\Facades\DataTables;
 
 class TemplateController extends Controller
 {
@@ -54,8 +55,34 @@ class TemplateController extends Controller
      */
     public function show(Template $template)
     {
-        return view('templates.show', compact('template'));
+        // Extraer valores entre doble corchete del template
+        $extractedValues = $this->extractValuesBetweenBrackets($template->sentence);
+    
+        return view('templates.show', compact('template', 'extractedValues'));
     }
+    private function extractValuesBetweenBrackets($templateSentence)
+    {
+        // Buscar todas las categorías entre doble corchete
+        preg_match_all('/{{(.*?)}}/', $templateSentence, $matches);
+        return array_unique($matches[1]);
+    }
+
+    public function getPrompts(Request $request, Template $template)
+    {
+        $prompts = $template->prompts()->with('llmResponses');
+    
+        return DataTables::of($prompts)
+            ->addIndexColumn()
+            ->addColumn('actions', function($prompt) {
+                return '<button class="btn btn-sm btn-secondary" type="button" data-toggle="collapse" data-target="#llmResponses-{{ $prompt->id }}" aria-expanded="false" aria-controls="llmResponses-{{ $prompt->id }}">
+                            Ver Respuestas LLM
+                        </button>';
+            })
+            ->rawColumns(['actions'])
+            ->make(true);
+    }
+
+
 
     /**
      * Show the form for editing the specified resource.
@@ -140,8 +167,7 @@ class TemplateController extends Controller
         $user->notify(new JobStartedNotification('GeneratePromptsJob'));
 
         return redirect()->route('templates.index')->with('success', 'Prompts generados exitosamente.');
-    }
-
+    }  
     private function replaceCategoriesWithIds(array $categories): array
     {
         $categoryIds = [];

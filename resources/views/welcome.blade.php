@@ -28,9 +28,9 @@
                         Mejorar el tiempo de espera, reintentos y esas cosas en llm api de groq.
                         Y probar con una ejecución completa y con una con muchos datos.
                         </li>
-                        <!-- <li class="list-group-item">
-                        Hacer que 1o se generen todas las llm_responses. Luego se podrá ejecutar ExecutePromptsJob.php genere 
-                        </li> -->
+                        <li class="list-group-item">
+                        Hacer que 1o se generen todas las llm_responses. Luego se podrá ejecutar ExecutePromptsJob.php generando todas las consultas a la api con jobs individuales. Y por último ejecutar las consultas una tras otra y si falla esperar 60 segundos.
+                        </li>
                     </ul>
                 </li>
                 

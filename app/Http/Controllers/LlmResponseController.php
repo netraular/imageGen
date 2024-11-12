@@ -131,4 +131,12 @@ class LlmResponseController extends Controller
             ->rawColumns(['actions'])
             ->make(true);
     }
+
+    public function getLlmResponsesByPrompt(Request $request)
+    {
+        $promptId = $request->input('prompt_id');
+        $llmResponses = LlmResponse::where('prompt_id', $promptId)->get();
+
+        return response()->json(['data' => $llmResponses]);
+    }
 }
