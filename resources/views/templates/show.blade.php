@@ -38,9 +38,9 @@
             @php
                 $promptsCount = $template->getPromptsCount();
             @endphp
-            <p>Prompts en estado "success": {{ $promptsCount['success'] }} / {{ $promptsCount['total'] }}</p>
-            <p>Prompts en estado "error": {{ $promptsCount['error'] }}</p>
-            <p>Prompts en otros estados: {{ $promptsCount['other'] }}</p>
+            <div style="width: 300px; height: 300px;">
+                <canvas id="promptsChart"></canvas>
+            </div>
         </div>
     </div>
 
@@ -99,6 +99,7 @@
 @section('plugins.DatatablesPlugins', true)
 
 @section('js')
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         const table = $('#prompts-table').DataTable({
@@ -164,6 +165,42 @@
                 }
             });
         });
+
+        // Datos para el gráfico
+        const promptsCount = @json($promptsCount);
+        const data = {
+            labels: ['Success', 'Error', 'Other'],
+            datasets: [{
+                data: [promptsCount.success, promptsCount.error, promptsCount.other],
+                backgroundColor: ['#28a745', '#dc3545', '#ffc107'],
+                hoverOffset: 4
+            }]
+        };
+
+        // Configuración del gráfico
+        const config = {
+            type: 'doughnut',
+            data: data,
+            options: {
+                plugins: {
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                const label = context.label || '';
+                                const value = context.raw || 0;
+                                const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                                const percentage = ((value / total) * 100).toFixed(2);
+                                return `${label}: ${value} (${percentage}%)`;
+                            }
+                        }
+                    }
+                }
+            }
+        };
+
+        // Crear el gráfico
+        const ctx = document.getElementById('promptsChart').getContext('2d');
+        new Chart(ctx, config);
     });
 </script>
 @endsection
