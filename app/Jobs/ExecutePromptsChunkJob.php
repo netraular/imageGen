@@ -62,7 +62,7 @@ class ExecutePromptsChunkJob implements ShouldQueue
     {
         $apiUrl = 'https://api.groq.com/openai/v1/chat/completions';
         $apiKey = config('services.groq.api_key');
-
+    
         $client = new Client();
         $body = [
             'messages' => [
@@ -73,11 +73,11 @@ class ExecutePromptsChunkJob implements ShouldQueue
             ],
             'model' => 'llama3-70b-8192',
         ];
-
+    
         try {
             $llmResponse->update(['status' => 'executing']);
             Log::channel('llmApi')->info("Estado actualizado a 'executing' para LLM Response ID: {$llmResponse->id}");
-
+    
             $response = $client->post($apiUrl, [
                 'headers' => [
                     'Authorization' => 'Bearer ' . $apiKey,
@@ -85,14 +85,14 @@ class ExecutePromptsChunkJob implements ShouldQueue
                 ],
                 'json' => $body,
             ]);
-
+    
             $responseData = json_decode($response->getBody(), true);
-
+    
             // Verificar si el contenido esperado está en la respuesta
             if (!isset($responseData['choices'][0]['message']['content'])) {
                 throw new \Exception('La respuesta de la API no contiene el contenido esperado.');
             }
-
+    
             // Guardar la respuesta generada
             $generatedResponse = $responseData['choices'][0]['message']['content'];
             $llmResponse->update([
@@ -100,15 +100,18 @@ class ExecutePromptsChunkJob implements ShouldQueue
                 'status' => 'success',
                 'source' => 'Groq API',
             ]);
-
+    
+            // Actualizar el estado del prompt al mismo estado que el llm response
+            $llmResponse->prompt->update(['status' => 'success']);
+    
             Log::channel('llmApi')->info("Respuesta LLM generada y guardada para LLM Response ID: {$llmResponse->id}");
-
+    
         } catch (\GuzzleHttp\Exception\ClientException $e) {
             if ($e->getCode() === 429) {
                 $retryAfter = 61; // Esperar 61 segundos en caso de error 429
                 $serviceControl = ThirdPartyService::where('service_name', 'groq_api')->first();
                 if ($serviceControl) {
-                    $serviceControl->pause('Rate limit exceeded',$retryAfter);
+                    $serviceControl->pause('Rate limit exceeded', $retryAfter);
                     Log::channel('llmApi')->warning("Servicio pausado por límite de tasa. Se reintentará en {$retryAfter} segundos.");
                 }
                 $this->release($retryAfter);
@@ -117,8 +120,12 @@ class ExecutePromptsChunkJob implements ShouldQueue
             throw $e;
         } catch (\Exception $e) {
             $llmResponse->update(['status' => 'error']);
+    
+            // Actualizar el estado del prompt al mismo estado que el llm response
+            $llmResponse->prompt->update(['status' => 'error']);
+    
             Log::channel('llmApi')->error("Error en la generación de respuesta LLM para LLM Response ID: {$llmResponse->id}. Mensaje: {$e->getMessage()}");
-
+    
             if ($this->attempts() > 3) {
                 $this->fail($e); // Falla el job si ya ha habido más de tres intentos
             } else {

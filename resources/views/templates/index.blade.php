@@ -13,6 +13,9 @@
                     <tr>
                         <th>ID</th>
                         <th>Frase</th>
+                        <th>Prompts Success</th>
+                        <th>Prompts Error</th>
+                        <th>Prompts Otros</th>
                         <th class="no-sort">Acciones</th>
                     </tr>
                 </thead>
@@ -21,7 +24,14 @@
                     <tr>
                         <td>{{ $template->id }}</td>
                         <td>{!! nl2br(e($template->sentence)) !!}</td>
+                            @php
+                                $promptsCount = $template->getPromptsCount();
+                            @endphp
+                        <td>{{$promptsCount['success']}} ({{ round( ($promptsCount['success'] /  $promptsCount['total'])*100,2)   }})%</td>
+                        <td>{{$promptsCount['error']}} ({{ round( ($promptsCount['error'] /  $promptsCount['total'])*100,2)   }})%</td>
+                        <td>{{$promptsCount['other']}} ({{ round(($promptsCount['other'] /  $promptsCount['total'])*100,2)   }})%</td>
                         <td>
+                            <a href="{{ route('templates.show', $template->id) }}" class="btn btn-sm btn-info">Ver</a>
                             <a href="{{ route('templates.edit', $template->id) }}" class="btn btn-sm btn-warning">Editar</a>
                             <form action="{{ route('templates.destroy', $template->id) }}" method="POST" style="display:inline;">
                                 @csrf

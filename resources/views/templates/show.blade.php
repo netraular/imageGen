@@ -33,6 +33,14 @@
                     <span class="badge badge-primary">{{ $value }}</span>
                 @endforeach
             </div>
+            <hr>
+            <h5>Prompts Generados</h5>
+            @php
+                $promptsCount = $template->getPromptsCount();
+            @endphp
+            <p>Prompts en estado "success": {{ $promptsCount['success'] }} / {{ $promptsCount['total'] }}</p>
+            <p>Prompts en estado "error": {{ $promptsCount['error'] }}</p>
+            <p>Prompts en otros estados: {{ $promptsCount['other'] }}</p>
         </div>
     </div>
 
