@@ -95,6 +95,7 @@
         });
 
         // Crear gráficos para cada fila
+        // Crear gráficos para cada fila
         $('.promptsChart').each(function() {
             const ctx = this.getContext('2d');
             const success = parseInt($(this).data('success'));
@@ -115,6 +116,9 @@
                 data: data,
                 options: {
                     plugins: {
+                        legend: {
+                            display: false // Desactivar la leyenda que muestra las etiquetas encima del gráfico
+                        },
                         tooltip: {
                             callbacks: {
                                 label: function(context) {
