@@ -9,6 +9,7 @@ class Prompt extends Model
     protected $fillable = [
         'sentence',
         'template_id',
+        'status',
     ];
 
     public function template()
